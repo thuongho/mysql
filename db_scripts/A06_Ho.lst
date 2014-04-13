@@ -1,0 +1,310 @@
+--------------
+-- Thuong Ho
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+    /* enable warnings! */
+
+use a_plants
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+/*  TASK 00 */ 
+select user(), current_date(), version(), @@sql_mode
+--------------
+
+*************************** 1. row ***************************
+        user(): t_ho@localhost
+current_date(): 2013-10-07
+     version(): 5.6.13
+    @@sql_mode: STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION
+1 row in set (0.05 sec)
+
+--------------
+/*  TASK 01 */
+SELECT cust_id, cust_name_last
+FROM customers 
+WHERE cust_id NOT IN (
+	SELECT cust_id 
+	FROM order_headers
+)
+--------------
+
++---------+----------------+
+| cust_id | cust_name_last |
++---------+----------------+
+|    3001 | Rollins        |
+|    3002 | Lewis          |
++---------+----------------+
+2 rows in set (0.00 sec)
+
+--------------
+/*  TASK 02 */
+SELECT plant_id, common_name
+FROM plants
+WHERE plant_id NOT IN(
+	SELECT plant_id
+	FROM order_details
+)
+--------------
+
++----------+---------------------+
+| plant_id | common_name         |
++----------+---------------------+
+|     1003 | Anemone             |
+|     1005 | Marsh Marigold      |
+|     2020 | Porcupine Thistle   |
+|     2021 | Hedgehog Thistle    |
+|     2057 | White Cemetery Iris |
++----------+---------------------+
+5 rows in set (0.00 sec)
+
+--------------
+/*  TASK 03 */
+SELECT P.plant_id, common_name, CONCAT(genus,' ',family) AS "Scientific_Name"
+FROM plants P
+LEFT JOIN plant_taxonomy T ON P.plant_id = T.plant_id
+JOIN order_details D ON P.plant_id = D.plant_id
+JOIN order_headers H ON D.order_id = H.order_id
+WHERE order_date BETWEEN '2013-07-01' AND '2013-08-31'
+--------------
+
++----------+--------------------+---------------------------+
+| plant_id | common_name        | Scientific_Name           |
++----------+--------------------+---------------------------+
+|     1004 | Wild Wood Anemones | Anemone Ranunculaceae     |
+|     1009 | Cursed Crowfoot    | Ranunuculus Ranunculaceae |
+|     1010 | California Poppy   | Eschscholzia Papaveraceae |
+|     1001 | Cowslip            | Primula Primulaceae       |
+|     1001 | Cowslip            | Primula Primulaceae       |
+|     1001 | Cowslip            | Primula Primulaceae       |
++----------+--------------------+---------------------------+
+6 rows in set (0.00 sec)
+
+--------------
+/*  TASK 04 */
+SELECT P.plant_id, common_name, CONCAT(genus,' ',family) AS "Scientific_Name"
+FROM plants P
+LEFT JOIN plant_taxonomy T ON P.plant_id = T.plant_id
+LEFT JOIN order_details D ON P.plant_id = D.plant_id
+LEFT JOIN order_headers H ON D.order_id = H.order_id
+WHERE order_date NOT BETWEEN '2013-07-01' AND '2013-08-31'
+OR order_date IS NULL
+--------------
+
++----------+------------------------+---------------------------+
+| plant_id | common_name            | Scientific_Name           |
++----------+------------------------+---------------------------+
+|     1001 | Cowslip                | Primula Primulaceae       |
+|     1002 | Common Buttercup       | Ranunculus Ranunculaceae  |
+|     1003 | Anemone                | Anemone Ranunculaceae     |
+|     1004 | Wild Wood Anemones     | Anemone Ranunculaceae     |
+|     1004 | Wild Wood Anemones     | Anemone Ranunculaceae     |
+|     1004 | Wild Wood Anemones     | Anemone Ranunculaceae     |
+|     1005 | Marsh Marigold         | Caltha Ranunculaceae      |
+|     1009 | Cursed Crowfoot        | Ranunuculus Ranunculaceae |
+|     1009 | Cursed Crowfoot        | Ranunuculus Ranunculaceae |
+|     1010 | California Poppy       | Eschscholzia Papaveraceae |
+|     2020 | Porcupine Thistle      | Cirsium Asteraceae        |
+|     2021 | Hedgehog Thistle       | NULL                      |
+|     2022 | Echinoderm Thistle     | NULL                      |
+|     2022 | Echinoderm Thistle     | NULL                      |
+|     2023 | Rocky Mountain Thistle | Cirsium Asteraceae        |
+|     2023 | Rocky Mountain Thistle | Cirsium Asteraceae        |
+|     2057 | White Cemetery Iris    | Iris Iridaceae            |
++----------+------------------------+---------------------------+
+17 rows in set (0.00 sec)
+
+--------------
+/*  TASK 05 */
+SELECT P.plant_id, common_name, CONCAT(genus,' ',family) AS "Scientific_Name"
+FROM plants P
+LEFT JOIN plant_taxonomy T ON P.plant_id = T.plant_id
+JOIN order_details D ON P.plant_id = D.plant_id
+JOIN order_headers H ON D.order_id = H.order_id
+WHERE order_date NOT BETWEEN '2013-07-01' AND '2013-08-31'
+--------------
+
++----------+------------------------+---------------------------+
+| plant_id | common_name            | Scientific_Name           |
++----------+------------------------+---------------------------+
+|     1001 | Cowslip                | Primula Primulaceae       |
+|     2022 | Echinoderm Thistle     | NULL                      |
+|     1002 | Common Buttercup       | Ranunculus Ranunculaceae  |
+|     1004 | Wild Wood Anemones     | Anemone Ranunculaceae     |
+|     1009 | Cursed Crowfoot        | Ranunuculus Ranunculaceae |
+|     1004 | Wild Wood Anemones     | Anemone Ranunculaceae     |
+|     2023 | Rocky Mountain Thistle | Cirsium Asteraceae        |
+|     1004 | Wild Wood Anemones     | Anemone Ranunculaceae     |
+|     1009 | Cursed Crowfoot        | Ranunuculus Ranunculaceae |
+|     1010 | California Poppy       | Eschscholzia Papaveraceae |
+|     2022 | Echinoderm Thistle     | NULL                      |
+|     2023 | Rocky Mountain Thistle | Cirsium Asteraceae        |
++----------+------------------------+---------------------------+
+12 rows in set (0.00 sec)
+
+--------------
+/*  TASK 06 */
+SET @name = 'Buttercup'
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+SELECT common_name, CONCAT(genus,' ',family) AS "Scientific_Name"
+FROM plants P
+LEFT JOIN plant_taxonomy T ON P.plant_id = T.plant_id
+WHERE LOCATE(@name, common_name) > 0
+--------------
+
++------------------+--------------------------+
+| common_name      | Scientific_Name          |
++------------------+--------------------------+
+| Common Buttercup | Ranunculus Ranunculaceae |
++------------------+--------------------------+
+1 row in set (0.00 sec)
+
+--------------
+SET @name = 'Thistle'
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+SELECT common_name, CONCAT(genus,' ',family) AS "Scientific_Name"
+FROM plants P
+LEFT JOIN plant_taxonomy T ON P.plant_id = T.plant_id
+WHERE LOCATE(@name, common_name) > 0
+--------------
+
++------------------------+--------------------+
+| common_name            | Scientific_Name    |
++------------------------+--------------------+
+| Porcupine Thistle      | Cirsium Asteraceae |
+| Hedgehog Thistle       | NULL               |
+| Echinoderm Thistle     | NULL               |
+| Rocky Mountain Thistle | Cirsium Asteraceae |
++------------------------+--------------------+
+4 rows in set (0.00 sec)
+
+--------------
+SET @name = 'Lupine'
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+SELECT common_name, CONCAT(genus,' ',family) AS "Scientific_Name"
+FROM plants P
+LEFT JOIN plant_taxonomy T ON P.plant_id = T.plant_id
+WHERE LOCATE(@name, common_name) > 0
+--------------
+
+Empty set (0.00 sec)
+
+--------------
+/*  TASK 07 */
+SELECT plant_id, common_name, on_hand, list_price, ROUND((on_hand * list_price),-2) AS "InventoryCost"
+FROM plants
+WHERE discontinued_date IS NOT NULL
+--------------
+
++----------+-----------------+---------+------------+---------------+
+| plant_id | common_name     | on_hand | list_price | InventoryCost |
++----------+-----------------+---------+------------+---------------+
+|     1003 | Anemone         |     150 |       8.25 |          1200 |
+|     1009 | Cursed Crowfoot |    1302 |       9.38 |         12200 |
++----------+-----------------+---------+------------+---------------+
+2 rows in set (0.00 sec)
+
+--------------
+/*  TASK 08 */
+SET @midwest = 'IL,IN,IA,KS,MI,MN,MO,NE,ND,OH,SD,WI'
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+SELECT H.cust_id, cust_name_last, order_date, cust_state
+FROM order_headers H
+RIGHT JOIN customers C ON H.cust_id = C.cust_id
+WHERE FIND_IN_SET(cust_state, @midwest) = 0
+--------------
+
++---------+----------------+------------+------------+
+| cust_id | cust_name_last | order_date | cust_state |
++---------+----------------+------------+------------+
+|    NULL | Lewis          | NULL       | CA         |
+|    3009 | Peterson       | 2013-01-31 | NY         |
+|    3009 | Peterson       | 2013-02-12 | NY         |
+|    3012 | Hawkins        | 2013-02-23 | CA         |
+|    3012 | Hawkins        | 2013-07-22 | CA         |
+|    3012 | Hawkins        | 2013-08-01 | CA         |
+|    3012 | Hawkins        | 2013-08-02 | CA         |
+|    3012 | Hawkins        | 2013-08-03 | CA         |
++---------+----------------+------------+------------+
+8 rows in set (0.00 sec)
+
+--------------
+/*  TASK 09 */
+SET @randcost = FLOOR(RAND()*(50-10) + 10)
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+SELECT plant_id, list_price
+FROM plants
+WHERE list_price < @randcost
+--------------
+
++----------+------------+
+| plant_id | list_price |
++----------+------------+
+|     1001 |      12.50 |
+|     1002 |      15.63 |
+|     1003 |       8.25 |
+|     1004 |      15.50 |
+|     1005 |       2.75 |
+|     1009 |       9.38 |
+|     1010 |       2.75 |
+|     2020 |      25.00 |
+|     2021 |      25.00 |
+|     2022 |      25.00 |
+|     2023 |      12.50 |
+|     2057 |       9.25 |
++----------+------------+
+12 rows in set (0.00 sec)
+
+--------------
+SET @randcost = FLOOR(RAND()*(50-10) + 10)
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+SELECT plant_id, list_price
+FROM plants
+WHERE list_price < @randcost
+--------------
+
++----------+------------+
+| plant_id | list_price |
++----------+------------+
+|     1001 |      12.50 |
+|     1002 |      15.63 |
+|     1003 |       8.25 |
+|     1004 |      15.50 |
+|     1005 |       2.75 |
+|     1009 |       9.38 |
+|     1010 |       2.75 |
+|     2023 |      12.50 |
+|     2057 |       9.25 |
++----------+------------+
+9 rows in set (0.00 sec)
+
+Bye

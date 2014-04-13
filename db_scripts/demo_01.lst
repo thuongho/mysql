@@ -1,0 +1,64 @@
+--------------
+/* Thuong Ho */
+use a_testbed
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+/* TASK 01 */
+select z_name, z_type
+from zoo
+--------------
+
++---------+-----------+
+| z_name  | z_type    |
++---------+-----------+
+| Sam     | Giraffe   |
+| Abigail | Armadillo |
+| mike    | hippo     |
+| Butch   | Lion      |
+| Dave    | Cow       |
+| Butcha  | Lion      |
+| Daisey  | Cow       |
++---------+-----------+
+7 rows in set (0.00 sec)
+
+--------------
+/* TASK 02 */
+select z_name, z_type
+from zoo
+where z_type ='giraffe'
+--------------
+
++--------+---------+
+| z_name | z_type  |
++--------+---------+
+| Sam    | Giraffe |
++--------+---------+
+1 row in set (0.00 sec)
+
+--------------
+/* TASK 03 */
+select z_name, z_type
+from zoo
+where z_type ='giraffe'
+--------------
+
++--------+---------+
+| z_name | z_type  |
++--------+---------+
+| Sam    | Giraffe |
++--------+---------+
+1 row in set (0.00 sec)
+
+--------------
+/* TASK 04 */
+select z_name, z_type
+from zoo
+where z_type ='bear'
+--------------
+
+Empty set (0.00 sec)
+
+Bye

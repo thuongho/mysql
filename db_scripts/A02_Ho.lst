@@ -1,0 +1,415 @@
+--------------
+-- Thuong Ho
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+    /* enable warnings! */
+
+use a_vets
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+/*  TASK 00 */ 
+select user(), current_date(), version(), @@sql_mode
+--------------
+
+*************************** 1. row ***************************
+        user(): t_ho@localhost
+current_date(): 2013-09-06
+     version(): 5.6.13
+    @@sql_mode: STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION
+1 row in set (0.00 sec)
+
+--------------
+/*  TASK 01 */
+SELECT stf_name_first, stf_name_last, stf_job_title
+FROM vt_staff
+--------------
+
++----------------+---------------+---------------+
+| stf_name_first | stf_name_last | stf_job_title |
++----------------+---------------+---------------+
+| Eliza          | Dolittle      | vet           |
+| Shirley        | Horn          | clerical      |
+| Bridgette      | Wilkommen     | vet           |
+| Sandy          | Helfen        | vet assnt     |
+| Marcin         | Wasilewski    | vet           |
+| Brenda         | Webster       | vet assnt     |
+| Rhoda          | Wabich        | vet           |
+| Pat            | Halvers       | kennel        |
+| Dexter         | Gordon        | vet assnt     |
+| Sandy          | Helfen        | vet assnt     |
++----------------+---------------+---------------+
+10 rows in set (0.00 sec)
+
+--------------
+/*  TASK 02 */
+SELECT stf_hire_date, stf_salary
+FROM vt_staff_pay
+ORDER BY stf_hire_date DESC
+--------------
+
++---------------+------------+
+| stf_hire_date | stf_salary |
++---------------+------------+
+| 2013-01-13    |   20000.00 |
+| 2013-01-13    |   20000.00 |
+| 2011-08-12    |   15500.00 |
+| 2011-06-01    |   65000.00 |
+| 2009-09-26    |   37500.00 |
+| 2008-08-12    |   20000.00 |
+| 2005-08-01    |   35000.00 |
+| 2005-06-01    |   40000.00 |
+| 1995-01-06    |   99000.00 |
++---------------+------------+
+9 rows in set (0.00 sec)
+
+--------------
+/*  TASK 03 */
+SELECT an_id AS 'ID'
+, an_name AS 'Name'
+, an_type AS 'Animal Type'
+, an_dob AS 'Birth Date'
+FROM vt_animals
+ORDER BY an_dob
+--------------
+
++-------+-----------------+-------------+------------+
+| ID    | Name            | Animal Type | Birth Date |
++-------+-----------------+-------------+------------+
+| 12035 | Mr Peanut       | bird        | 1995-02-28 |
+| 15401 | Pinkie          | lizard      | 1998-03-15 |
+| 21002 | Edger           | hedgehog    | 2002-10-02 |
+| 21003 | Calvin Coolidge | dog         | 2004-06-18 |
+| 11029 | NULL            | bird        | 2005-10-01 |
+| 15165 | Burgess         | dog         | 2005-11-20 |
+| 16004 | Napper          | cat         | 2006-06-06 |
+| 16003 | Ursula          | cat         | 2006-06-06 |
+| 15001 | Big Mike        | chelonian   | 2008-02-02 |
+| 15002 | George          | chelonian   | 2008-02-02 |
+| 19845 | Pinkie          | dog         | 2009-02-02 |
+| 21001 | Yoggie          | hedgehog    | 2009-05-22 |
+| 17027 | 3P#_25          | lizard      | 2010-01-10 |
+| 17026 | 3P#_26          | lizard      | 2010-01-10 |
+| 17025 | 25              | lizard      | 2010-01-10 |
+| 10002 | Gutsy           | cat         | 2010-04-15 |
+| 16002 | Fritz           | porcupine   | 2010-05-25 |
+| 21316 | Etta            | cat         | 2010-06-11 |
+| 21007 | NULL            | snake       | 2010-06-12 |
+| 21005 | Koshka          | dormouse    | 2011-03-06 |
+| 21004 | Gutsy           | snake       | 2011-05-12 |
+| 21006 | Koshka          | hamster     | 2011-06-06 |
+| 21317 | Manfried        | cat         | 2011-06-11 |
+| 21314 | Adalwine        | cat         | 2011-06-11 |
+| 11025 | NULL            | bird        | 2012-02-01 |
+| 11015 | Kenny           | snake       | 2012-02-23 |
+| 12038 | Gutsy           | porcupine   | 2012-04-29 |
+| 17002 | Fritzchen       | porcupine   | 2012-06-02 |
+| 21315 | Baldric         | cat         | 2012-06-11 |
+| 21318 | Waldrom         | cat         | 2012-06-11 |
++-------+-----------------+-------------+------------+
+30 rows in set (0.00 sec)
+
+--------------
+/*  TASK 04 */
+SELECT DISTINCT an_type
+FROM vt_animals
+--------------
+
++-----------+
+| an_type   |
++-----------+
+| bird      |
+| cat       |
+| chelonian |
+| dog       |
+| dormouse  |
+| hamster   |
+| hedgehog  |
+| lizard    |
+| porcupine |
+| snake     |
++-----------+
+10 rows in set (0.01 sec)
+
+--------------
+/*  TASK 05 */
+SELECT *
+FROM vt_services
+ORDER BY srv_desc
+--------------
+
++--------+----------------+--------------------------------------------+--------------+
+| srv_id | srv_list_price | srv_desc                                   | srv_type     |
++--------+----------------+--------------------------------------------+--------------+
+|    615 |          78.30 | antibiotics                                | medicine     |
+|    612 |          25.91 | Buprenex oral drops 1 ml                   | medicine     |
+|    625 |         155.00 | CBC and scan                               | treatment    |
+|    101 |          50.00 | Dental Cleaning-Canine                     | treatment    |
+|    102 |          45.00 | Dental Cleaning-Feline                     | treatment    |
+|    110 |         100.00 | Dental Cleaning-Other                      | treatment    |
+|    604 |         109.00 | Dental Scaling                             | treatment    |
+|   4601 |         275.00 | Feline Behaviour Modification Consultation | treatment    |
+|    603 |          78.00 | Feline Dental X_ray                        | treatment    |
+|    225 |          75.00 | Feline PCR Series                          | medicine     |
+|    551 |          35.50 | First Feline PCR                           | medicine     |
+|    306 |          32.00 | Followup Exam-Bird                         | office visit |
+|    398 |          35.00 | Followup Exam-Canine                       | office visit |
+|    308 |          45.00 | Followup Exam-Feline                       | office visit |
+|    341 |          25.00 | Followup Exam-Reptile                      | office visit |
+|    524 |          25.00 | Followup Exam-Small Mammal                 | office visit |
+|    602 |         222.00 | General Anethesia 1 hour                   | treatment    |
+|    400 |          10.50 | Hazardous Materials Disposal               | treatment    |
+|    613 |          47.00 | Hospital stay- short                       | treatment    |
+|   1003 |          26.00 | Intestinal Parasite Screen                 | treatment    |
+|    749 |          29.50 | Preds-chicken                              | medicine     |
+|    748 |          29.50 | Preds-liver                                | medicine     |
+|    106 |          75.00 | Routine Exam-Bird                          | treatment    |
+|    105 |          80.00 | Routine Exam-Canine                        | office visit |
+|    108 |          80.00 | Routine Exam-Feline                        | office visit |
+|    104 |          60.00 | Routine Exam-Reptile                       | office visit |
+|    523 |          60.00 | Routine Exam-Small Mammal                  | office visit |
+|   1002 |          25.00 | Scaly Mite Powder                          | medicine     |
+|    552 |          25.00 | Second Feline PCR                          | medicine     |
+|    553 |          25.00 | Third Feline PCR                           | medicine     |
+|    605 |         535.00 | Tooth extraction Level 1                   | treatment    |
+|    606 |          40.00 | Tooth extraction Level 2                   | treatment    |
+|    607 |          57.00 | Tooth extraction Level 3                   | treatment    |
+|    687 |          45.00 | Vitamin E- Concentrated                    | medicine     |
++--------+----------------+--------------------------------------------+--------------+
+34 rows in set (0.00 sec)
+
+--------------
+/*  TASK 06 */
+SELECT srv_id, srv_list_price, srv_desc
+FROM vt_services
+ORDER BY srv_list_price DESC
+--------------
+
++--------+----------------+--------------------------------------------+
+| srv_id | srv_list_price | srv_desc                                   |
++--------+----------------+--------------------------------------------+
+|    605 |         535.00 | Tooth extraction Level 1                   |
+|   4601 |         275.00 | Feline Behaviour Modification Consultation |
+|    602 |         222.00 | General Anethesia 1 hour                   |
+|    625 |         155.00 | CBC and scan                               |
+|    604 |         109.00 | Dental Scaling                             |
+|    110 |         100.00 | Dental Cleaning-Other                      |
+|    105 |          80.00 | Routine Exam-Canine                        |
+|    108 |          80.00 | Routine Exam-Feline                        |
+|    615 |          78.30 | antibiotics                                |
+|    603 |          78.00 | Feline Dental X_ray                        |
+|    225 |          75.00 | Feline PCR Series                          |
+|    106 |          75.00 | Routine Exam-Bird                          |
+|    523 |          60.00 | Routine Exam-Small Mammal                  |
+|    104 |          60.00 | Routine Exam-Reptile                       |
+|    607 |          57.00 | Tooth extraction Level 3                   |
+|    101 |          50.00 | Dental Cleaning-Canine                     |
+|    613 |          47.00 | Hospital stay- short                       |
+|    102 |          45.00 | Dental Cleaning-Feline                     |
+|    308 |          45.00 | Followup Exam-Feline                       |
+|    687 |          45.00 | Vitamin E- Concentrated                    |
+|    606 |          40.00 | Tooth extraction Level 2                   |
+|    551 |          35.50 | First Feline PCR                           |
+|    398 |          35.00 | Followup Exam-Canine                       |
+|    306 |          32.00 | Followup Exam-Bird                         |
+|    749 |          29.50 | Preds-chicken                              |
+|    748 |          29.50 | Preds-liver                                |
+|   1003 |          26.00 | Intestinal Parasite Screen                 |
+|    612 |          25.91 | Buprenex oral drops 1 ml                   |
+|   1002 |          25.00 | Scaly Mite Powder                          |
+|    552 |          25.00 | Second Feline PCR                          |
+|    341 |          25.00 | Followup Exam-Reptile                      |
+|    524 |          25.00 | Followup Exam-Small Mammal                 |
+|    553 |          25.00 | Third Feline PCR                           |
+|    400 |          10.50 | Hazardous Materials Disposal               |
++--------+----------------+--------------------------------------------+
+34 rows in set (0.00 sec)
+
+--------------
+/*  TASK 07 */
+SELECT ex_id, ex_fee
+FROM vt_exam_details
+ORDER BY ex_id, ex_fee
+--------------
+
++-------+--------+
+| ex_id | ex_fee |
++-------+--------+
+|  1996 |  29.50 |
+|  1997 |   0.00 |
+|  1998 |  25.00 |
+|  1998 |  30.00 |
+|  1998 |  45.00 |
+|  1999 |  20.00 |
+|  2007 |  25.00 |
+|  3001 |  25.00 |
+|  3010 |  25.00 |
+|  3101 |  60.00 |
+|  3101 |  75.00 |
+|  3102 |  60.00 |
+|  3103 | 275.00 |
+|  3104 |  47.00 |
+|  3104 |  75.00 |
+|  3105 |  50.50 |
+|  3105 | 150.00 |
+|  3202 |  20.00 |
+|  3203 |  20.00 |
+|  3282 |  50.00 |
+|  3282 |  60.00 |
+|  3288 |  25.00 |
+|  3288 |  30.00 |
+|  3288 |  45.00 |
+|  3304 |  25.00 |
+|  3304 |  25.00 |
+|  3306 |  25.00 |
+|  3306 |  30.00 |
+|  3306 |  45.00 |
+|  3390 |  50.00 |
+|  3390 |  55.00 |
+|  3392 |  21.00 |
+|  3392 |  30.00 |
+|  3392 |  45.00 |
+|  3393 |  29.50 |
+|  3409 |  25.00 |
+|  3411 |  20.00 |
+|  3412 |  20.00 |
+|  3413 |   5.00 |
+|  3420 |  80.00 |
+|  3486 | 275.00 |
+|  3494 |  30.00 |
+|  3513 |  30.00 |
+|  3513 |  75.00 |
+|  3514 |  15.00 |
+|  3514 |  25.00 |
+|  3514 |  30.00 |
+|  3552 |   2.25 |
+|  3612 |  25.91 |
+|  3612 |  40.00 |
+|  3612 |  47.00 |
+|  3612 |  57.00 |
+|  3612 |  78.00 |
+|  3612 |  78.30 |
+|  3612 | 109.00 |
+|  3612 | 155.00 |
+|  3612 | 222.00 |
++-------+--------+
+57 rows in set (0.00 sec)
+
+--------------
+/*  TASK 08 */
+SELECT DISTINCT an_name, an_type
+FROM vt_animals
+ORDER BY an_type, an_name
+--------------
+
++-----------------+-----------+
+| an_name         | an_type   |
++-----------------+-----------+
+| NULL            | bird      |
+| Mr Peanut       | bird      |
+| Adalwine        | cat       |
+| Baldric         | cat       |
+| Etta            | cat       |
+| Gutsy           | cat       |
+| Manfried        | cat       |
+| Napper          | cat       |
+| Ursula          | cat       |
+| Waldrom         | cat       |
+| Big Mike        | chelonian |
+| George          | chelonian |
+| Burgess         | dog       |
+| Calvin Coolidge | dog       |
+| Pinkie          | dog       |
+| Koshka          | dormouse  |
+| Koshka          | hamster   |
+| Edger           | hedgehog  |
+| Yoggie          | hedgehog  |
+| 25              | lizard    |
+| 3P#_25          | lizard    |
+| 3P#_26          | lizard    |
+| Pinkie          | lizard    |
+| Fritz           | porcupine |
+| Fritzchen       | porcupine |
+| Gutsy           | porcupine |
+| NULL            | snake     |
+| Gutsy           | snake     |
+| Kenny           | snake     |
++-----------------+-----------+
+29 rows in set (0.00 sec)
+
+--------------
+/*  TASK 09 */
+SELECT ex_id, ex_date, stf_id
+FROM vt_exam_headers
+ORDER BY stf_id, ex_date DESC
+--------------
+
++-------+---------------------+--------+
+| ex_id | ex_date             | stf_id |
++-------+---------------------+--------+
+|  3552 | 2013-06-10 10:30:00 |     15 |
+|  3513 | 2013-06-06 10:30:00 |     15 |
+|  3612 | 2013-05-23 08:30:00 |     15 |
+|  3413 | 2013-05-01 16:30:00 |     15 |
+|  3420 | 2013-04-01 16:30:00 |     15 |
+|  3486 | 2013-03-31 13:00:00 |     15 |
+|  3392 | 2013-03-26 09:30:00 |     15 |
+|  3390 | 2013-03-22 09:00:00 |     15 |
+|  3304 | 2013-03-06 10:30:00 |     15 |
+|  3282 | 2013-02-23 10:30:00 |     15 |
+|  3102 | 2013-01-02 13:00:00 |     15 |
+|  3101 | 2013-01-02 13:00:00 |     15 |
+|  3494 | 2013-04-22 09:00:00 |     25 |
+|  3288 | 2013-02-09 09:00:00 |     25 |
+|  3514 | 2013-06-10 10:45:00 |     29 |
+|  3412 | 2013-04-30 14:30:00 |     29 |
+|  3411 | 2013-04-29 14:30:00 |     29 |
+|  3409 | 2013-03-27 10:45:00 |     29 |
+|  3393 | 2013-03-23 12:15:00 |     29 |
+|  2007 | 2013-03-21 10:45:00 |     29 |
+|  3306 | 2013-03-06 10:45:00 |     29 |
+|  3203 | 2013-02-03 14:30:00 |     29 |
+|  3202 | 2013-02-03 14:30:00 |     29 |
+|  3001 | 2012-12-24 10:45:00 |     29 |
+|  3010 | 2012-12-22 10:45:00 |     29 |
+|  1999 | 2012-12-03 14:30:00 |     29 |
+|  1996 | 2012-11-16 09:15:00 |     29 |
+|  1998 | 2012-11-07 10:45:00 |     29 |
+|  1997 | 2012-11-06 10:45:00 |     29 |
+|  3105 | 2012-10-10 09:15:00 |     29 |
+|  3104 | 2013-01-02 16:30:00 |     38 |
+|  3103 | 2013-01-02 15:30:00 |     38 |
++-------+---------------------+--------+
+32 rows in set (0.00 sec)
+
+--------------
+/*  TASK 10 */
+SELECT DISTINCT cl_state, cl_city
+FROM vt_clients
+ORDER BY cl_state, cl_city
+--------------
+
++----------+---------------+
+| cl_state | cl_city       |
++----------+---------------+
+| AR       | Big Rock      |
+| CA       | San Diego     |
+| CA       | San Francisco |
+| IL       | Springfield   |
+| MA       | Boston        |
+| MA       | Spring Valley |
+| MO       | Springfield   |
+| ND       | Big Rock      |
+| NM       | San Francisco |
+| NY       | New York      |
+| OH       | Dayton        |
+| OH       | Springfield   |
++----------+---------------+
+12 rows in set (0.00 sec)
+
+Bye

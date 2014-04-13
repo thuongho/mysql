@@ -1,0 +1,382 @@
+--------------
+-- Thuong Ho
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+    /* enable warnings! */
+
+/*  TASK 00 */ 
+select user(), current_date(), version(), @@sql_mode
+--------------
+
+*************************** 1. row ***************************
+        user(): t_ho@localhost
+current_date(): 2013-10-26
+     version(): 5.6.13
+    @@sql_mode: STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION
+1 row in set (0.06 sec)
+
+--------------
+/*  TASK 01 */
+Set @rundate = current_date
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+Set @first_month = Date_format(Date_sub(@rundate, interval 6 month), '%M %Y')
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+Set @second_month = Date_format(Date_sub(@rundate, interval 5 month), '%M %Y')
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+Set @third_month = Date_format(Date_sub(@rundate, interval 4 month), '%M %Y')
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+Select @rundate, @first_month, @second_month, @third_month
+--------------
+
+*************************** 1. row ***************************
+     @rundate: 2013-10-26
+ @first_month: April 2013
+@second_month: May 2013
+ @third_month: June 2013
+1 row in set (0.00 sec)
+
+--------------
+/*  TASK 02 */
+Select *
+From a_bkorders.bkv_custorders
+Where Date_format(order_date, '%M %Y') = @first_month
+--------------
+
++--------+------------------+------------+----------+------+
+| c_id   | c_name           | order_date | order_id | book |
++--------+------------------+------------+----------+------+
+| 212921 | Books on Tap     | 2013-04-05 |    31455 | 1279 |
+| 234138 | Keats, John      | 2013-04-02 |    41853 | 1448 |
+| 234138 | Keats, John      | 2013-04-02 |    41853 | 1162 |
+| 272787 | Carlson, Ben     | 2013-04-08 |     1256 | 1103 |
+| 272787 | Carlson, Ben     | 2013-04-08 |     1256 | 1104 |
+| 276381 | Collins, Douglas | 2013-04-15 |    31560 | 1279 |
++--------+------------------+------------+----------+------+
+6 rows in set (0.00 sec)
+
+--------------
+Select *
+From a_bkorders.bkv_custorders
+Where Date_format(order_date, '%M %Y') = @second_month
+--------------
+
++--------+------------------+------------+----------+------+
+| c_id   | c_name           | order_date | order_id | book |
++--------+------------------+------------+----------+------+
+| 212921 | Books on Tap     | 2013-05-01 |    23890 | 1103 |
+| 212921 | Books on Tap     | 2013-05-24 |    42331 | 1142 |
+| 224038 | Austin, Pat      | 2013-05-26 |    24345 | 1104 |
+| 224038 | Austin, Pat      | 2013-05-26 |    24345 | 1306 |
+| 224038 | Austin, Pat      | 2013-05-02 |    25803 | 1128 |
+| 224038 | Austin, Pat      | 2013-05-02 |    25803 | 1301 |
+| 224038 | Austin, Pat      | 2013-05-02 |    25803 | 1304 |
+| 228175 | Cardin, Benjamin | 2013-05-06 |    24802 | 1103 |
+| 228175 | Cardin, Benjamin | 2013-05-06 |    24802 | 1306 |
+| 228175 | Cardin, Benjamin | 2013-05-05 |    42891 | 1142 |
+| 239427 | Marksa, Anna     | 2013-05-04 |    22774 | 1304 |
+| 239427 | Marksa, Anna     | 2013-05-04 |    22774 | 1305 |
+| 260368 | Muller, Jonathan | 2013-05-05 |    10812 | 1128 |
++--------+------------------+------------+----------+------+
+13 rows in set (0.01 sec)
+
+--------------
+Select *
+From a_bkorders.bkv_custorders
+Where Date_format(order_date, '%M %Y') = @third_month
+--------------
+
++--------+----------------------+------------+----------+------+
+| c_id   | c_name               | order_date | order_id | book |
++--------+----------------------+------------+----------+------+
+| 218709 | Bonnard, Paul        | 2013-06-09 |     1310 | 1774 |
+| 218709 | Bonnard, Paul        | 2013-06-09 |     1310 | 1619 |
+| 218709 | Bonnard, Paul        | 2013-06-09 |     1310 | 1269 |
+| 222477 | Rossetti, Christina  | 2013-06-05 |     1302 | 1258 |
+| 227105 | Kafka, Franz         | 2013-06-30 |     1345 | 1105 |
+| 259906 | Capybara, Wile E.    | 2013-06-04 |    32906 | 2028 |
+| 259906 | Capybara, Wile E.    | 2013-06-04 |    32906 | 1103 |
+| 259906 | Capybara, Wile E.    | 2013-06-04 |    32906 | 1103 |
+| 261502 | Hawthorne, Nathaniel | 2013-06-29 |     1321 | 2008 |
+| 261502 | Hawthorne, Nathaniel | 2013-06-29 |     1321 | 1978 |
+| 272787 | Carlson, Ben         | 2013-06-02 |     1262 | 2009 |
+| 272787 | Carlson, Ben         | 2013-06-02 |     1262 | 2001 |
+| 290298 | Swift, Jonathan      | 2013-06-30 |     1328 | 1182 |
++--------+----------------------+------------+----------+------+
+13 rows in set (0.00 sec)
+
+--------------
+/*  TASK 03 */
+Select c_id, c_name
+From a_bkorders.bkv_custorders
+Where Date_format(order_date, '%M %Y') = @first_month
+UNION
+Select c_id, c_name
+From a_bkorders.bkv_custorders
+Where Date_format(order_date, '%M %Y') = @second_month
+UNION
+Select c_id, c_name
+From a_bkorders.bkv_custorders
+Where Date_format(order_date, '%M %Y') = @third_month
+--------------
+
++--------+----------------------+
+| c_id   | c_name               |
++--------+----------------------+
+| 212921 | Books on Tap         |
+| 234138 | Keats, John          |
+| 272787 | Carlson, Ben         |
+| 276381 | Collins, Douglas     |
+| 224038 | Austin, Pat          |
+| 228175 | Cardin, Benjamin     |
+| 239427 | Marksa, Anna         |
+| 260368 | Muller, Jonathan     |
+| 218709 | Bonnard, Paul        |
+| 222477 | Rossetti, Christina  |
+| 227105 | Kafka, Franz         |
+| 259906 | Capybara, Wile E.    |
+| 261502 | Hawthorne, Nathaniel |
+| 290298 | Swift, Jonathan      |
++--------+----------------------+
+14 rows in set (0.00 sec)
+
+--------------
+/*  TASK 04 */
+Select Distinct c_id, c_name
+From a_bkorders.bkv_custorders
+Where c_id NOT IN (
+	Select c_id
+	From a_bkorders.bkv_custorders
+	Where Date_format(order_date, '%M %Y') = @first_month
+	UNION
+	Select c_id
+	From a_bkorders.bkv_custorders
+	Where Date_format(order_date, '%M %Y') = @second_month
+	UNION
+	Select c_id
+	From a_bkorders.bkv_custorders
+	Where Date_format(order_date, '%M %Y') = @third_month)
+--------------
+
++--------+---------------------+
+| c_id   | c_name              |
++--------+---------------------+
+| 200368 | Blake, William      |
+| 208950 | Adams, Samuel       |
+| 211483 | Carroll, Lewis      |
+| 217796 | Anders              |
+| 221297 | Dodgson, Charles    |
+| 226656 | Randall, Randell    |
+| 234709 | Brahms, Johnnie     |
+| 258595 | Jobs, Peter         |
+| 259969 | Carlsen, Benny      |
+| 263119 | Jones               |
+| 267780 | Shelly, Mary        |
+| 272611 | Jarrett, Keith      |
+| 282716 | Biederbecke, Dwight |
+| 296598 | Collins, Douglas    |
+| 299099 | Sam, Dave           |
++--------+---------------------+
+15 rows in set (0.04 sec)
+
+--------------
+/*  TASK 05 */
+Select Distinct c_id, c_name
+From a_bkorders.bkv_custorders
+Where c_id IN (
+	Select c_id
+	From a_bkorders.bkv_custorders
+	Where Date_format(order_date, '%M %Y') = @first_month)
+And c_id IN (
+	Select c_id
+	From a_bkorders.bkv_custorders
+	Where Date_format(order_date, '%M %Y') = @second_month)
+And c_id IN (
+	Select c_id
+	From a_bkorders.bkv_custorders
+	Where Date_format(order_date, '%M %Y') = @third_month)
+--------------
+
+Empty set (0.01 sec)
+
+--------------
+	
+
+/*  TASK 06 */
+Select Distinct c_id, c_name
+From a_bkorders.bkv_custorders
+Where c_id IN (
+	Select c_id
+	From a_bkorders.bkv_custorders
+	Where Date_format(order_date, '%M %Y') = @first_month)
+And c_id NOT IN (
+	Select c_id
+	From a_bkorders.bkv_custorders
+	Where Date_format(order_date, '%M %Y') = @second_month
+	UNION
+	Select c_id
+	From a_bkorders.bkv_custorders
+	Where Date_format(order_date, '%M %Y') = @third_month)
+--------------
+
++--------+------------------+
+| c_id   | c_name           |
++--------+------------------+
+| 234138 | Keats, John      |
+| 276381 | Collins, Douglas |
++--------+------------------+
+2 rows in set (0.01 sec)
+
+--------------
+/*  TASK 07 */
+Select Distinct c_id, c_name
+From a_bkorders.bkv_custorders
+Where c_id IN (
+	Select c_id
+	From a_bkorders.bkv_custorders
+	Where Date_format(order_date, '%M %Y') = @first_month)
+And c_id IN (
+	Select c_id
+	From a_bkorders.bkv_custorders
+	Where Date_format(order_date, '%M %Y') IN (@second_month, @third_month))
+--------------
+
++--------+--------------+
+| c_id   | c_name       |
++--------+--------------+
+| 212921 | Books on Tap |
+| 272787 | Carlson, Ben |
++--------+--------------+
+2 rows in set (0.01 sec)
+
+--------------
+/*  TASK 08 */
+Select Distinct c_id, c_name
+From a_bkorders.bkv_custorders
+Where c_id IN (
+	Select c_id
+	From a_bkorders.bkv_custorders
+	Where Date_format(order_date, '%M %Y') = @first_month)
+And c_id IN (
+	Select c_id
+	From a_bkorders.bkv_custorders
+	Where Date_format(order_date, '%M %Y') IN (@second_month, @third_month))
+And c_id NOT IN (
+	Select c_id
+	From a_bkorders.bkv_custorders
+	Where c_id IN (
+		Select c_id
+		From a_bkorders.bkv_custorders
+		Where Date_format(order_date, '%M %Y') = @second_month)
+	And c_id IN (
+		Select c_id
+		From a_bkorders.bkv_custorders
+		Where Date_format(order_date, '%M %Y') = @third_month))
+--------------
+
++--------+--------------+
+| c_id   | c_name       |
++--------+--------------+
+| 212921 | Books on Tap |
+| 272787 | Carlson, Ben |
++--------+--------------+
+2 rows in set (0.00 sec)
+
+--------------
+/*  TASK 09 */
+Select Distinct c_id, c_name
+From a_bkorders.bkv_custorders
+Where c_id IN (
+	Select c_id
+	From a_bkorders.bkv_custorders
+	Where Date_format(order_date, '%M %Y') = @first_month
+	UNION
+	Select c_id
+	From a_bkorders.bkv_custorders
+	Where Date_format(order_date, '%M %Y') = @second_month)
+And c_id NOT IN (
+	Select c_id
+	From a_bkorders.bkv_custorders
+	Where Date_format(order_date, '%M %Y') = @third_month)
+--------------
+
++--------+------------------+
+| c_id   | c_name           |
++--------+------------------+
+| 212921 | Books on Tap     |
+| 224038 | Austin, Pat      |
+| 228175 | Cardin, Benjamin |
+| 234138 | Keats, John      |
+| 239427 | Marksa, Anna     |
+| 260368 | Muller, Jonathan |
+| 276381 | Collins, Douglas |
++--------+------------------+
+7 rows in set (0.04 sec)
+
+--------------
+/*  TASK 10 */
+Select Distinct c_id, c_name
+From a_bkorders.bkv_custorders
+Where c_id IN (
+	Select c_id
+	From a_bkorders.bkv_custorders
+	Where Date_format(order_date, '%M %Y') = @first_month
+    And c_id NOT IN (
+		Select c_id
+		From a_bkorders.bkv_custorders
+		Where Date_format(order_date, '%M %Y') IN (@second_month, @third_month))
+	UNION
+	Select c_id
+	From a_bkorders.bkv_custorders
+	Where Date_format(order_date, '%M %Y') = @second_month
+    And c_id NOT IN (
+		Select c_id
+		From a_bkorders.bkv_custorders
+		Where Date_format(order_date, '%M %Y') IN (@first_month, @third_month))
+	UNION
+	Select c_id
+	From a_bkorders.bkv_custorders
+	Where Date_format(order_date, '%M %Y') = @third_month
+    And c_id NOT IN (
+		Select c_id
+		From a_bkorders.bkv_custorders
+		Where Date_format(order_date, '%M %Y') IN (@second_month, @first_month)))
+--------------
+
++--------+----------------------+
+| c_id   | c_name               |
++--------+----------------------+
+| 218709 | Bonnard, Paul        |
+| 222477 | Rossetti, Christina  |
+| 224038 | Austin, Pat          |
+| 227105 | Kafka, Franz         |
+| 228175 | Cardin, Benjamin     |
+| 234138 | Keats, John          |
+| 239427 | Marksa, Anna         |
+| 259906 | Capybara, Wile E.    |
+| 260368 | Muller, Jonathan     |
+| 261502 | Hawthorne, Nathaniel |
+| 276381 | Collins, Douglas     |
+| 290298 | Swift, Jonathan      |
++--------+----------------------+
+12 rows in set (0.03 sec)
+
+Bye

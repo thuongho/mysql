@@ -1,0 +1,716 @@
+--------------
+-- Thuong Ho
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+    /* enable warnings! */
+
+use a_xml
+--------------
+
+Query OK, 0 rows affected (0.03 sec)
+
+--------------
+/*  TASK 00 */ 
+select user(), current_date(), version(), @@sql_mode
+--------------
+
+*************************** 1. row ***************************
+        user(): t_ho@localhost
+current_date(): 2013-12-16
+     version(): 5.6.13
+    @@sql_mode: STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION
+1 row in set (0.01 sec)
+
+--------------
+/*  TASK 01 */
+-- rerun the provided script to create and populate the table
+drop table if exists a_xml.xml_animals
+--------------
+
+Query OK, 0 rows affected (0.07 sec)
+
+--------------
+create table a_xml.xml_animals(
+  id    int primary key
+, datax TEXT)
+--------------
+
+Query OK, 0 rows affected (0.41 sec)
+
+--------------
+truncate table a_xml.xml_animals
+--------------
+
+Query OK, 0 rows affected (0.03 sec)
+
+--------------
+insert into a_xml.xml_animals values (1,
+'<client cl_id="8243"><cl_name>Johnson</cl_name><pets>
+<animal><an_id>136</an_id><an_type>bird</an_type><an_name>ShowBoat</an_name><an_price>75</an_price></animal>
+<animal><an_id>137</an_id><an_type>bird</an_type><an_name>Mr. Peanut</an_name><an_price>250</an_price></animal>
+</pets></client>')
+--------------
+
+Query OK, 1 row affected (0.00 sec)
+
+--------------
+ 
+insert into a_xml.xml_animals values (2, 
+'<client cl_id="3908"><cl_name>Nelson</cl_name><pets>
+<animal><an_id>1201</an_id><an_type>cat</an_type>
+<an_name>Ursula</an_name><an_name>Snookums</an_name><an_name>Mittens</an_name><an_price>500</an_price></animal>
+</pets></client>')
+--------------
+
+Query OK, 1 row affected (0.00 sec)
+
+--------------
+ 
+ insert into a_xml.xml_animals values (3,
+'<client cl_id="3775"><cl_name>Miller</cl_name><pets/></client>')
+--------------
+
+Query OK, 1 row affected (0.01 sec)
+
+--------------
+ 
+ insert into a_xml.xml_animals values (4,
+'<client cl_id="8467"><cl_name>Miller</cl_name><pets>
+<animal><an_id>205</an_id><an_type>bird</an_type><an_name>ShowBoat</an_name><an_price>75</an_price></animal>
+<animal><an_id>207</an_id><an_type>bird</an_type><an_name>Mr. Peanut</an_name><an_price>150</an_price></animal>
+<animal><an_id>212</an_id><an_type>bird</an_type><an_name>Tweet</an_name><an_price>275</an_price></animal>
+<animal><an_id>215</an_id><an_type>bird</an_type><an_name>Charlie</an_name><an_price>380</an_price></animal>
+</pets></client>')
+--------------
+
+Query OK, 1 row affected (0.00 sec)
+
+--------------
+ 
+ insert into a_xml.xml_animals values (5,
+'<client cl_id="4578"><cl_name>Leeson</cl_name><pets>
+<animal><an_id>358</an_id><an_type>bird</an_type><an_name>Archibald</an_name><an_price>275</an_price></animal>
+<animal><an_id>369</an_id><an_type>cat</an_type><an_name>Smithers</an_name><an_name>Smuthers</an_name><an_price>250</an_price></animal>
+<animal><an_id>3478</an_id><an_type>dog</an_type><an_name>Bossun</an_name><an_price>250</an_price></animal>
+</pets></client>')
+--------------
+
+Query OK, 1 row affected (0.00 sec)
+
+--------------
+  insert into a_xml.xml_animals values (6,
+'<client cl_id="9478"><cl_name>Terry</cl_name><pets>
+<animal><an_id>658</an_id><an_type>bird</an_type><an_name>Archibald</an_name><an_price>275</an_price></animal>
+<animal><an_id>669</an_id><an_type>bird</an_type><an_name>Smithers1</an_name><an_name>Smuthers2</an_name><an_price>250</an_price></animal><
+animal><an_id>2478</an_id><an_type>bird</an_type><an_name>cat </an_name><an_price>250</an_price></animal>
+</pets></client>')
+--------------
+
+Query OK, 1 row affected (0.00 sec)
+
+--------------
+ 
+
+  insert into a_xml.xml_animals values (7,
+'<client cl_id="4478"><cl_name>Clyde</cl_name><pets>
+<animal><an_id>101</an_id><an_type>bird</an_type><an_name>Archibald</an_name><an_price>275</an_price></animal>
+<animal><an_id>102</an_id><an_type>cat</an_type><an_name>Smithers</an_name><an_name>Smuthers</an_name><an_price>250</an_price></animal>
+<animal><an_id>103</an_id><an_type>dog</an_type><an_name>Bossun</an_name><an_price>250</an_price></animal>
+<animal><an_id>301</an_id><an_type>bird</an_type><an_name>Archibald</an_name><an_price>275</an_price></animal>
+<animal><an_id>201</an_id><an_type>cat</an_type><an_name>Smithers</an_name><an_name>Smuthers</an_name><an_price>250</an_price></animal>
+<animal><an_id>401</an_id><an_type>dog</an_type><an_name>Bossun</an_name><an_price>250</an_price></animal>
+</pets></client>')
+--------------
+
+Query OK, 1 row affected (0.02 sec)
+
+--------------
+/*  TASK 02 */
+-- multiple pets where first pet is a cat (task 3)
+insert into a_xml.xml_animals values (8,
+	'<client cl_id="1111"><cl_name>Mark</cl_name><pets>
+	<animal><an_id>9</an_id><an_type>cat</an_type><an_name>Boots</an_name><an_price>50</an_price></animal>
+	<animal><an_id>10</an_id><an_type>rodent</an_type><an_name>Furball</an_name><an_price>20</an_price></animal>
+	</pets></client>')
+--------------
+
+Query OK, 1 row affected (0.00 sec)
+
+--------------
+-- multiple pets with multiple names (task 6), include last pet as a cat (task 3)
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+insert into a_xml.xml_animals values (9,
+	'<client cl_id="1112"><cl_name>Jason</cl_name><pets>
+	<animal><an_id>11</an_id><an_type>snake</an_type><an_name>Mr. Hiss</an_name><an_name>Greeny</an_name><an_price>160</an_price></animal>
+	<animal><an_id>12</an_id><an_type>cow</an_type><an_name>Hughbert</an_name><an_name>Hefney</an_name><an_price>300</an_price></animal>
+	<animal><an_id>8</an_id><an_type>cat</an_type><an_name>Huggles</an_name><an_name>Pops</an_name><an_price>150</an_price></animal>
+	</pets></client>')
+--------------
+
+Query OK, 1 row affected (0.00 sec)
+
+--------------
+	
+-- an_type caterpillar to test wildcard for cat	(task 3)
+insert into a_xml.xml_animals values (10,
+	'<client cl_id="1113"><cl_name>Freddy</cl_name><pets>
+	<animal><an_id>16</an_id><an_type>caterpillar</an_type><an_name>Wiggles</an_name><an_name>Fuzzy</an_name><an_price>1</an_price></animal>
+	</pets></client>')
+--------------
+
+Query OK, 1 row affected (0.00 sec)
+
+--------------
+	
+-- pet with name "NULL" not NULL value (task 7)
+insert into a_xml.xml_animals values (11,
+	'<client cl_id="1114"><cl_name>Freddy</cl_name><pets>
+	<animal><an_id>16</an_id><an_type>spider</an_type><an_name>NULL</an_name><an_price>550</an_price></animal>
+	<animal><an_id>13</an_id><an_type>spider</an_type><an_name>Furball</an_name><an_price>500</an_price></animal>
+	</pets></client>')
+--------------
+
+Query OK, 1 row affected (0.00 sec)
+
+--------------
+	
+-- empty an_name (task 7)
+insert into a_xml.xml_animals values (12,
+	'<client cl_id="1111"><cl_name>Trisha</cl_name><pets>
+	<animal><an_id>14</an_id><an_type>lizard</an_type><an_name></an_name><an_price>80</an_price></animal>
+	<animal><an_id>15</an_id><an_type>snake</an_type><an_name>Snake</an_name><an_price>130</an_price></animal>
+	</pets></client>')
+--------------
+
+Query OK, 1 row affected (0.00 sec)
+
+--------------
+		
+-- display the data
+Select extractValue(datax, '/client/cl_name') as Client
+, extractValue(datax, '/client/pets/animal/an_type') as TypeOfAnimal
+, extractValue(datax, '/client/pets/animal/an_name') as AnimalName
+, extractValue(datax, '/client/pets/animal/an_price') as AnimalPrice
+From a_xml.xml_animals
+--------------
+
++---------+---------------------------+-----------------------------------------------------------------------+-------------------------+
+| Client  | TypeOfAnimal              | AnimalName                                                            | AnimalPrice             |
++---------+---------------------------+-----------------------------------------------------------------------+-------------------------+
+| Johnson | bird bird                 | ShowBoat Mr. Peanut                                                   | 75 250                  |
+| Nelson  | cat                       | Ursula Snookums Mittens                                               | 500                     |
+| Miller  |                           |                                                                       |                         |
+| Miller  | bird bird bird bird       | ShowBoat Mr. Peanut Tweet Charlie                                     | 75 150 275 380          |
+| Leeson  | bird cat dog              | Archibald Smithers Smuthers Bossun                                    | 275 250 250             |
+| Terry   | bird bird bird            | Archibald Smithers1 Smuthers2 cat                                     | 275 250 250             |
+| Clyde   | bird cat dog bird cat dog | Archibald Smithers Smuthers Bossun Archibald Smithers Smuthers Bossun | 275 250 250 275 250 250 |
+| Mark    | cat rodent                | Boots Furball                                                         | 50 20                   |
+| Jason   | snake cow cat             | Mr. Hiss Greeny Hughbert Hefney Huggles Pops                          | 160 300 150             |
+| Freddy  | caterpillar               | Wiggles Fuzzy                                                         | 1                       |
+| Freddy  | spider spider             | NULL Furball                                                          | 550 500                 |
+| Trisha  | lizard snake              | Snake                                                                 | 80 130                  |
++---------+---------------------------+-----------------------------------------------------------------------+-------------------------+
+12 rows in set (0.00 sec)
+
+--------------
+/*  TASK 03 */
+Select extractValue(datax, '/client/cl_name') as Client
+, extractValue(datax, '/client/@cl_id') as ClientID
+From a_xml.xml_animals
+Where extractValue(datax, '//an_type') LIKE '% cat %'
+or extractValue(datax, '//an_type') LIKE 'cat'
+or extractValue(datax, '//an_type') LIKE 'cat %'
+or extractValue(datax, '//an_type') LIKE '% cat'
+--------------
+
++--------+----------+
+| Client | ClientID |
++--------+----------+
+| Nelson | 3908     |
+| Leeson | 4578     |
+| Clyde  | 4478     |
+| Mark   | 1111     |
+| Jason  | 1112     |
++--------+----------+
+5 rows in set (0.00 sec)
+
+--------------
+/*  TASK 04 */
+Select extractValue(datax, '/client/cl_name') as Client
+, extractValue(datax, '/client/@cl_id') as ClientID
+From a_xml.xml_animals
+Where extractValue(datax, 'count(/client/pets/animal[an_type="cat"])') > 0
+--------------
+
++--------+----------+
+| Client | ClientID |
++--------+----------+
+| Nelson | 3908     |
+| Leeson | 4578     |
+| Clyde  | 4478     |
+| Mark   | 1111     |
+| Jason  | 1112     |
++--------+----------+
+5 rows in set (0.01 sec)
+
+--------------
+/*  TASK 05 */
+Select extractValue(datax, '/client/cl_name') as Client
+, extractValue(datax, '/client/@cl_id') as ClientID
+, extractValue(datax, '/client/pets/animal/an_type') as Animal
+, extractValue(datax, '/client/pets/animal/an_price') as Price
+From a_xml.xml_animals
+Where extractValue(datax, 'count(/client/pets/animal[an_price=250 and an_type="bird"])') > 0
+--------------
+
++---------+----------+----------------+-------------+
+| Client  | ClientID | Animal         | Price       |
++---------+----------+----------------+-------------+
+| Johnson | 8243     | bird bird      | 75 250      |
+| Terry   | 9478     | bird bird bird | 275 250 250 |
++---------+----------+----------------+-------------+
+2 rows in set (0.00 sec)
+
+--------------
+/*  TASK 06 */
+Select Client
+, ClientID
+, case 
+    when Type is null or Type = ""then 'no animals'
+    when Name is null then concat(Type, ' with no name')
+    else concat(Type, ' named ', Name)
+end as Animal_First
+From (
+	Select extractValue(datax, '/client/cl_name') as Client
+	, extractValue(datax, '/client/@cl_id') as ClientID
+	, extractValue(datax, '//animal[1]/an_type') as Type
+	, extractValue(datax, '//animal[1]/an_name') as Name
+	From a_xml.xml_animals) tbl
+--------------
+
++---------+----------+-----------------------------------+
+| Client  | ClientID | Animal_First                      |
++---------+----------+-----------------------------------+
+| Johnson | 8243     | bird named ShowBoat               |
+| Nelson  | 3908     | cat named Ursula Snookums Mittens |
+| Miller  | 3775     | no animals                        |
+| Miller  | 8467     | bird named ShowBoat               |
+| Leeson  | 4578     | bird named Archibald              |
+| Terry   | 9478     | bird named Archibald              |
+| Clyde   | 4478     | bird named Archibald              |
+| Mark    | 1111     | cat named Boots                   |
+| Jason   | 1112     | snake named Mr. Hiss Greeny       |
+| Freddy  | 1113     | caterpillar named Wiggles Fuzzy   |
+| Freddy  | 1114     | spider named NULL                 |
+| Trisha  | 1111     | lizard named                      |
++---------+----------+-----------------------------------+
+12 rows in set (0.07 sec)
+
+--------------
+/*  TASK 07 */
+Select Client
+, ClientID
+, case 
+    when Type is null or Type = "" then 'no animals'
+    when Name is null or Name = "" then concat(Type, ' with no name')
+    else concat(Type, ' named ', Animal)
+end as Animal_First
+From (
+	Select extractValue(datax, '/client/cl_name') as Client
+	, extractValue(datax, '/client/@cl_id') as ClientID
+	, extractValue(datax, '//animal[1]/an_type') as Type
+	, extractValue(datax, '//animal[1]/an_name') as Name
+	, extractValue(datax, '//animal[1]/an_name[last()]') as Animal
+	From a_xml.xml_animals) tbl
+--------------
+
++---------+----------+-------------------------+
+| Client  | ClientID | Animal_First            |
++---------+----------+-------------------------+
+| Johnson | 8243     | bird named ShowBoat     |
+| Nelson  | 3908     | cat named Mittens       |
+| Miller  | 3775     | no animals              |
+| Miller  | 8467     | bird named ShowBoat     |
+| Leeson  | 4578     | bird named Archibald    |
+| Terry   | 9478     | bird named Archibald    |
+| Clyde   | 4478     | bird named Archibald    |
+| Mark    | 1111     | cat named Boots         |
+| Jason   | 1112     | snake named Greeny      |
+| Freddy  | 1113     | caterpillar named Fuzzy |
+| Freddy  | 1114     | spider named NULL       |
+| Trisha  | 1111     | lizard with no name     |
++---------+----------+-------------------------+
+12 rows in set (0.01 sec)
+
+--------------
+/*  TASK 08 */
+-- can an_id value be NULL value otherwise I only need to test for blanks?
+Select extractValue(datax, '/client/cl_name') as Client
+, extractValue(datax, '/client/@cl_id') as ClientID
+From a_xml.xml_animals
+Where extractValue(datax, '//animal[2]/an_id') is not null 
+and extractValue(datax, '//animal[2]/an_id') != ""
+and (extractValue(datax, '//animal[4]/an_id') is null 
+    or extractValue(datax, '//animal[4]/an_id') = "")
+--------------
+
++---------+----------+
+| Client  | ClientID |
++---------+----------+
+| Johnson | 8243     |
+| Leeson  | 4578     |
+| Terry   | 9478     |
+| Mark    | 1111     |
+| Jason   | 1112     |
+| Freddy  | 1114     |
+| Trisha  | 1111     |
++---------+----------+
+7 rows in set (0.00 sec)
+
+--------------
+/*  TASK 09 */
+Select extractValue(datax, '/client/cl_name') as Client
+, extractValue(datax, '/client/@cl_id') as ClientID
+, extractValue(datax, 'count(//animal/an_id)') as NumberOfAnimals
+From a_xml.xml_animals
+Order by NumberOfAnimals desc
+--------------
+
++---------+----------+-----------------+
+| Client  | ClientID | NumberOfAnimals |
++---------+----------+-----------------+
+| Clyde   | 4478     | 6               |
+| Miller  | 8467     | 4               |
+| Leeson  | 4578     | 3               |
+| Terry   | 9478     | 3               |
+| Jason   | 1112     | 3               |
+| Johnson | 8243     | 2               |
+| Mark    | 1111     | 2               |
+| Freddy  | 1114     | 2               |
+| Trisha  | 1111     | 2               |
+| Nelson  | 3908     | 1               |
+| Freddy  | 1113     | 1               |
+| Miller  | 3775     | 0               |
++---------+----------+-----------------+
+12 rows in set (0.00 sec)
+
+--------------
+/*  TASK 10 */
+Select extractValue(datax, '/descendant-or-self::*/@cl_id') as ClientID
+, extractValue(datax, '//descendant::*') as Client
+From a_xml.xml_animals
+--------------
+
+*************************** 1. row ***************************
+ClientID: 8243
+  Client: Johnson 
+ 136 bird ShowBoat 75 
+ 137 bird Mr. Peanut 250 
+
+*************************** 2. row ***************************
+ClientID: 3908
+  Client: Nelson 
+ 1201 cat 
+ Ursula Snookums Mittens 500 
+
+*************************** 3. row ***************************
+ClientID: 3775
+  Client: Miller
+*************************** 4. row ***************************
+ClientID: 8467
+  Client: Miller 
+ 205 bird ShowBoat 75 
+ 207 bird Mr. Peanut 150 
+ 212 bird Tweet 275 
+ 215 bird Charlie 380 
+
+*************************** 5. row ***************************
+ClientID: 4578
+  Client: Leeson 
+ 358 bird Archibald 275 
+ 369 cat Smithers Smuthers 250 
+ 3478 dog Bossun 250 
+
+*************************** 6. row ***************************
+ClientID: 9478
+  Client: Terry 
+ 658 bird Archibald 275 
+ 669 bird Smithers1 Smuthers2 250 2478 bird cat  250 
+
+*************************** 7. row ***************************
+ClientID: 4478
+  Client: Clyde 
+ 101 bird Archibald 275 
+ 102 cat Smithers Smuthers 250 
+ 103 dog Bossun 250 
+ 301 bird Archibald 275 
+ 201 cat Smithers Smuthers 250 
+ 401 dog Bossun 250 
+
+*************************** 8. row ***************************
+ClientID: 1111
+  Client: Mark 
+	 9 cat Boots 50 
+	 10 rodent Furball 20 
+	
+*************************** 9. row ***************************
+ClientID: 1112
+  Client: Jason 
+	 11 snake Mr. Hiss Greeny 160 
+	 12 cow Hughbert Hefney 300 
+	 8 cat Huggles Pops 150 
+	
+*************************** 10. row ***************************
+ClientID: 1113
+  Client: Freddy 
+	 16 caterpillar Wiggles Fuzzy 1 
+	
+*************************** 11. row ***************************
+ClientID: 1114
+  Client: Freddy 
+	 16 spider NULL 550 
+	 13 spider Furball 500 
+	
+*************************** 12. row ***************************
+ClientID: 1111
+  Client: Trisha 
+	 14 lizard 80 
+	 15 snake Snake 130 
+	
+12 rows in set (0.00 sec)
+
+--------------
+-- combined? Not sure how to display client ID and then all of it's descendant
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+-- book example wasn't helpful
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+Select extractValue(datax, '/client/@cl_id | /descendant::*') as ClientInfo
+From a_xml.xml_animals
+--------------
+
+*************************** 1. row ***************************
+ClientInfo: 8243 Johnson 
+ 136 bird ShowBoat 75 
+ 137 bird Mr. Peanut 250 
+
+*************************** 2. row ***************************
+ClientInfo: 3908 Nelson 
+ 1201 cat 
+ Ursula Snookums Mittens 500 
+
+*************************** 3. row ***************************
+ClientInfo: 3775 Miller
+*************************** 4. row ***************************
+ClientInfo: 8467 Miller 
+ 205 bird ShowBoat 75 
+ 207 bird Mr. Peanut 150 
+ 212 bird Tweet 275 
+ 215 bird Charlie 380 
+
+*************************** 5. row ***************************
+ClientInfo: 4578 Leeson 
+ 358 bird Archibald 275 
+ 369 cat Smithers Smuthers 250 
+ 3478 dog Bossun 250 
+
+*************************** 6. row ***************************
+ClientInfo: 9478 Terry 
+ 658 bird Archibald 275 
+ 669 bird Smithers1 Smuthers2 250 2478 bird cat  250 
+
+*************************** 7. row ***************************
+ClientInfo: 4478 Clyde 
+ 101 bird Archibald 275 
+ 102 cat Smithers Smuthers 250 
+ 103 dog Bossun 250 
+ 301 bird Archibald 275 
+ 201 cat Smithers Smuthers 250 
+ 401 dog Bossun 250 
+
+*************************** 8. row ***************************
+ClientInfo: 1111 Mark 
+	 9 cat Boots 50 
+	 10 rodent Furball 20 
+	
+*************************** 9. row ***************************
+ClientInfo: 1112 Jason 
+	 11 snake Mr. Hiss Greeny 160 
+	 12 cow Hughbert Hefney 300 
+	 8 cat Huggles Pops 150 
+	
+*************************** 10. row ***************************
+ClientInfo: 1113 Freddy 
+	 16 caterpillar Wiggles Fuzzy 1 
+	
+*************************** 11. row ***************************
+ClientInfo: 1114 Freddy 
+	 16 spider NULL 550 
+	 13 spider Furball 500 
+	
+*************************** 12. row ***************************
+ClientInfo: 1111 Trisha 
+	 14 lizard 80 
+	 15 snake Snake 130 
+	
+12 rows in set (0.00 sec)
+
+--------------
+/*  TASK 11 */
+Select extractValue(datax, '/client/cl_name') as Client
+, extractValue(datax, '/client/@cl_id') as ClientID
+, extractValue(datax, '//animal/an_type[self:text()="bird"]/../an_name[1]') as AnimalName
+, extractValue(datax, '//animal/an_type[self:text()="bird"]/../child::*') as AnimalData
+From a_xml.xml_animals
+--------------
+
+*************************** 1. row ***************************
+    Client: Johnson
+  ClientID: 8243
+AnimalName: ShowBoat Mr. Peanut
+AnimalData: 136 bird ShowBoat 75 137 bird Mr. Peanut 250
+*************************** 2. row ***************************
+    Client: Nelson
+  ClientID: 3908
+AnimalName: 
+AnimalData: 
+*************************** 3. row ***************************
+    Client: Miller
+  ClientID: 3775
+AnimalName: 
+AnimalData: 
+*************************** 4. row ***************************
+    Client: Miller
+  ClientID: 8467
+AnimalName: ShowBoat Mr. Peanut Tweet Charlie
+AnimalData: 205 bird ShowBoat 75 207 bird Mr. Peanut 150 212 bird Tweet 275 215 bird Charlie 380
+*************************** 5. row ***************************
+    Client: Leeson
+  ClientID: 4578
+AnimalName: Archibald
+AnimalData: 358 bird Archibald 275
+*************************** 6. row ***************************
+    Client: Terry
+  ClientID: 9478
+AnimalName: Archibald Smithers1 cat 
+AnimalData: 658 bird Archibald 275 669 bird Smithers1 Smuthers2 250 2478 bird cat  250
+*************************** 7. row ***************************
+    Client: Clyde
+  ClientID: 4478
+AnimalName: Archibald Archibald
+AnimalData: 101 bird Archibald 275 301 bird Archibald 275
+*************************** 8. row ***************************
+    Client: Mark
+  ClientID: 1111
+AnimalName: 
+AnimalData: 
+*************************** 9. row ***************************
+    Client: Jason
+  ClientID: 1112
+AnimalName: 
+AnimalData: 
+*************************** 10. row ***************************
+    Client: Freddy
+  ClientID: 1113
+AnimalName: 
+AnimalData: 
+*************************** 11. row ***************************
+    Client: Freddy
+  ClientID: 1114
+AnimalName: 
+AnimalData: 
+*************************** 12. row ***************************
+    Client: Trisha
+  ClientID: 1111
+AnimalName: 
+AnimalData: 
+12 rows in set (0.00 sec)
+
+--------------
+/*  TASK 12 */
+Select Client, ClientID, nullif(AnimalName,"") as AnimalName, nullif(AnimalData, "") as AnimalData
+From (
+	Select extractValue(datax, '/client/cl_name') as Client
+	, extractValue(datax, '/client/@cl_id') as ClientID
+	, extractValue(datax, '//animal/an_type[self:text()="bird"]/../an_name[1]') as AnimalName
+	, extractValue(datax, '//animal/an_type[self:text()="bird"]/../child::*') as AnimalData
+	From a_xml.xml_animals) tbl
+--------------
+
+*************************** 1. row ***************************
+    Client: Johnson
+  ClientID: 8243
+AnimalName: ShowBoat Mr. Peanut
+AnimalData: 136 bird ShowBoat 75 137 bird Mr. Peanut 250
+*************************** 2. row ***************************
+    Client: Nelson
+  ClientID: 3908
+AnimalName: NULL
+AnimalData: NULL
+*************************** 3. row ***************************
+    Client: Miller
+  ClientID: 3775
+AnimalName: NULL
+AnimalData: NULL
+*************************** 4. row ***************************
+    Client: Miller
+  ClientID: 8467
+AnimalName: ShowBoat Mr. Peanut Tweet Charlie
+AnimalData: 205 bird ShowBoat 75 207 bird Mr. Peanut 150 212 bird Tweet 275 215 bird Charlie 380
+*************************** 5. row ***************************
+    Client: Leeson
+  ClientID: 4578
+AnimalName: Archibald
+AnimalData: 358 bird Archibald 275
+*************************** 6. row ***************************
+    Client: Terry
+  ClientID: 9478
+AnimalName: Archibald Smithers1 cat 
+AnimalData: 658 bird Archibald 275 669 bird Smithers1 Smuthers2 250 2478 bird cat  250
+*************************** 7. row ***************************
+    Client: Clyde
+  ClientID: 4478
+AnimalName: Archibald Archibald
+AnimalData: 101 bird Archibald 275 301 bird Archibald 275
+*************************** 8. row ***************************
+    Client: Mark
+  ClientID: 1111
+AnimalName: NULL
+AnimalData: NULL
+*************************** 9. row ***************************
+    Client: Jason
+  ClientID: 1112
+AnimalName: NULL
+AnimalData: NULL
+*************************** 10. row ***************************
+    Client: Freddy
+  ClientID: 1113
+AnimalName: NULL
+AnimalData: NULL
+*************************** 11. row ***************************
+    Client: Freddy
+  ClientID: 1114
+AnimalName: NULL
+AnimalData: NULL
+*************************** 12. row ***************************
+    Client: Trisha
+  ClientID: 1111
+AnimalName: NULL
+AnimalData: NULL
+12 rows in set (0.00 sec)
+
+Bye

@@ -1,0 +1,131 @@
+--------------
+-- Thuong Ho
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+show create function a_testbed.BookSize
+--------------
+
+*************************** 1. row ***************************
+            Function: BookSize
+            sql_mode: STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION
+     Create Function: CREATE DEFINER=`t_ho`@`localhost` FUNCTION `BookSize`(
+    in_pages int
+) RETURNS varchar(25) CHARSET latin1
+BEGIN
+    declare v_message varchar(25);
+    
+    if (in_pages <= 200) then
+      set v_message = "Mini";
+elseif (in_pages between 201 and 500) then
+      set v_message = "Small";
+elseif (in_pages between 501 and 1000) then
+      set v_message = "Medium";
+    elseif (in_pages between 1001 and 1500) then
+      set v_message = "Large";
+    elseif (in_pages > 1500) then
+      set v_message = "TooLong";
+    else
+      set v_message = "Invalid Input";
+    end if;
+
+    return v_message;
+END
+character_set_client: utf8
+collation_connection: utf8_general_ci
+  Database Collation: latin1_swedish_ci
+1 row in set (0.00 sec)
+
+--------------
+show create function a_testbed.InternalBlankCount
+--------------
+
+*************************** 1. row ***************************
+            Function: InternalBlankCount
+            sql_mode: STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION
+     Create Function: CREATE DEFINER=`t_ho`@`localhost` FUNCTION `InternalBlankCount`(
+    in_string varchar(250)
+) RETURNS varchar(250) CHARSET latin1
+BEGIN
+    declare v_count varchar(250);
+    declare v_trim varchar(250);
+    declare v_srem varchar(250);
+    
+    if (coalesce(length(in_string), 0) > 0) then
+      set v_trim = rtrim(ltrim(in_string));
+      set v_srem = replace(v_trim, ' ', '');
+      set v_count = length(v_trim) - length(v_srem);
+    else
+      set v_count = 0;
+    end if;
+
+    return v_count;    
+END
+character_set_client: utf8
+collation_connection: utf8_general_ci
+  Database Collation: latin1_swedish_ci
+1 row in set (0.00 sec)
+
+--------------
+show create function a_testbed.NameFormat
+--------------
+
+*************************** 1. row ***************************
+            Function: NameFormat
+            sql_mode: STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION
+     Create Function: CREATE DEFINER=`t_ho`@`localhost` FUNCTION `NameFormat`(
+p_mode char(1)
+, lastname varchar(25)
+, firstname varchar(25)
+) RETURNS varchar(52) CHARSET latin1
+BEGIN
+    declare v_message varchar(52);
+
+    if (firstname is null) then
+      set v_message = lastname;
+    elseif (p_mode = "F") then
+      set v_message = concat(firstname, ' ', lastname);
+    else
+      set v_message = concat(lastname, ', ', firstname);
+    end if;
+
+    return v_message;
+END
+character_set_client: utf8
+collation_connection: utf8_general_ci
+  Database Collation: latin1_swedish_ci
+1 row in set (0.00 sec)
+
+--------------
+show create function a_testbed.PrevMonth
+--------------
+
+*************************** 1. row ***************************
+            Function: PrevMonth
+            sql_mode: STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION
+     Create Function: CREATE DEFINER=`t_ho`@`localhost` FUNCTION `PrevMonth`(
+    in_date date
+    ,in_mn_count int
+) RETURNS varchar(25) CHARSET latin1
+BEGIN
+    declare v_date varchar(25);
+    set in_mn_count = coalesce(in_mn_count,0);
+     
+    if (in_date is null) then
+      set in_date = current_date;
+    else
+      set in_date = in_date;
+    end if; 
+
+    set v_date = Date_format(Date_sub(in_date, interval in_mn_count month), '%Y-%m');   
+
+    return v_date;
+END
+character_set_client: utf8
+collation_connection: utf8_general_ci
+  Database Collation: latin1_swedish_ci
+1 row in set (0.00 sec)
+
+Bye

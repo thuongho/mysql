@@ -1,0 +1,341 @@
+--------------
+-- Thuong Ho
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+    /* enable warnings! */
+
+use a_testbed
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+/*  TASK 00 */ 
+select user(), current_date(), version(), @@sql_mode
+--------------
+
+*************************** 1. row ***************************
+        user(): t_ho@localhost
+current_date(): 2013-11-28
+     version(): 5.6.13
+    @@sql_mode: STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION
+1 row in set (0.00 sec)
+
+--------------
+/*  TASK 01 */
+Select mode, lastname, firstname, should_display
+, a_testbed.NameFormat(mode, lastname, firstname)
+From (
+	Select "F" as mode
+	, "Buns" as lastname
+	, "Al" as firstname
+	, "Al Buns" as should_display
+	union all
+	  Select "F", "Jetsons", null, "Jetsons"
+	union all
+	  Select "L", "Sims", "Bart", "Sims, Bart"
+	union all
+	  Select "L", "Taylor", null, "Taylor"
+	union all
+	  Select null, "James", "Jessie", "James, Jessie"
+	union all
+	  Select null, "Jetsons", null, "Jetsons"
+	) as testtable1
+--------------
+
++------+----------+-----------+----------------+-------------------------------------------------+
+| mode | lastname | firstname | should_display | a_testbed.NameFormat(mode, lastname, firstname) |
++------+----------+-----------+----------------+-------------------------------------------------+
+| F    | Buns     | Al        | Al Buns        | Al Buns                                         |
+| F    | Jetsons  | NULL      | Jetsons        | Jetsons                                         |
+| L    | Sims     | Bart      | Sims, Bart     | Sims, Bart                                      |
+| L    | Taylor   | NULL      | Taylor         | Taylor                                          |
+| NULL | James    | Jessie    | James, Jessie  | James, Jessie                                   |
+| NULL | Jetsons  | NULL      | Jetsons        | Jetsons                                         |
++------+----------+-----------+----------------+-------------------------------------------------+
+6 rows in set (0.00 sec)
+
+--------------
+/*  TASK 02 */
+Select cust_id
+, a_testbed.NameFormat("L", cust_name_last, cust_name_first) as formatted_name
+From a_bkorders.customers
+Order by cust_id
+Limit 10
+--------------
+
++---------+---------------------+
+| cust_id | formatted_name      |
++---------+---------------------+
+|  200368 | Blake, William      |
+|  202958 | Denver              |
+|  208950 | Adams, Samuel       |
+|  211483 | Carroll, Lewis      |
+|  212921 | Books on Tap        |
+|  217002 | Grieg, Edvard       |
+|  217796 | Anders              |
+|  218709 | Bonnard, Paul       |
+|  221297 | Dodgson, Charles    |
+|  222477 | Rossetti, Christina |
++---------+---------------------+
+10 rows in set (0.00 sec)
+
+--------------
+/*  TASK 03 */
+Select a_testbed.NameFormat("F", substring(title,1,25), concat(book_id,':')) as Book
+From a_bkinfo.books
+Limit 10
+--------------
+
++---------------------------------+
+| Book                            |
++---------------------------------+
+| 1077: Programming for Poets     |
+| 1101: Programming SQL Server wi |
+| 1102: Practical Standards for V |
+| 1103: Selected Poems            |
+| 1104: Sibley Guide to Bird Life |
+| 1105: SQL:1999 Relational Langu |
+| 1106: SQL for Smarties          |
+| 1107: SQL Puzzles and Answers   |
+| 1108: Database Systems          |
+| 1109: Intro to DB Systems-7th E |
++---------------------------------+
+10 rows in set (0.00 sec)
+
+--------------
+Select replace(a_testbed.NameFormat("L", book_id, substring(title,1,25)), ',', ':') as Book
+From a_bkinfo.books
+Limit 10
+--------------
+
++---------------------------------+
+| Book                            |
++---------------------------------+
+| 1077: Programming for Poets     |
+| 1101: Programming SQL Server wi |
+| 1102: Practical Standards for V |
+| 1103: Selected Poems            |
+| 1104: Sibley Guide to Bird Life |
+| 1105: SQL:1999 Relational Langu |
+| 1106: SQL for Smarties          |
+| 1107: SQL Puzzles and Answers   |
+| 1108: Database Systems          |
+| 1109: Intro to DB Systems-7th E |
++---------------------------------+
+10 rows in set (0.00 sec)
+
+--------------
+/*  TASK 04 */
+select string, no_of_spaces, a_testbed.InternalBlankCount(string)
+From (
+	Select 'hi world' as string, 1 as no_of_spaces
+    union all
+      Select 'This function has 4 spaces', 4
+    union all
+      Select '', 0
+    union all
+      Select null, 0
+    union all
+      Select '  Check out the spaces before', 4
+    union all
+      Select 'Spaces after   ', 1
+    union all
+      Select 'Five spaces in   string', 5
+    ) as testtable2
+--------------
+
++-------------------------------+--------------+--------------------------------------+
+| string                        | no_of_spaces | a_testbed.InternalBlankCount(string) |
++-------------------------------+--------------+--------------------------------------+
+| hi world                      |            1 | 1                                    |
+| This function has 4 spaces    |            4 | 4                                    |
+|                               |            0 | 0                                    |
+| NULL                          |            0 | 0                                    |
+|   Check out the spaces before |            4 | 4                                    |
+| Spaces after                  |            1 | 1                                    |
+| Five spaces in   string       |            5 | 5                                    |
++-------------------------------+--------------+--------------------------------------+
+7 rows in set (0.00 sec)
+
+--------------
+/*  TASK 05 */
+Select pages, correct_category, a_testbed.BookSize(pages)
+From (
+	Select 0 as pages, "Mini" as correct_category
+	union all
+	  Select 200, "Mini"
+	union all
+	  Select 500, "Small"
+	union all
+	  Select 750, "Medium"
+	union all
+	  Select 1500, "Large"
+	union all
+	  Select 20000, "Too Long"
+	union all
+	  Select null, "Invalid Input"
+	/* union all
+	  Select 'abc' */
+	) as testtable3
+--------------
+
++-------+------------------+---------------------------+
+| pages | correct_category | a_testbed.BookSize(pages) |
++-------+------------------+---------------------------+
+|     0 | Mini             | Mini                      |
+|   200 | Mini             | Mini                      |
+|   500 | Small            | Small                     |
+|   750 | Medium           | Medium                    |
+|  1500 | Large            | Large                     |
+| 20000 | Too Long         | TooLong                   |
+|  NULL | Invalid Input    | Invalid Input             |
++-------+------------------+---------------------------+
+7 rows in set (0.00 sec)
+
+--------------
+	
+
+/*  TASK 06 */
+Select a_testbed.BookSize(page_count) as BookSize, Count(page_count) as NumBooks
+From a_bkinfo.books
+Group by BookSize
+Order by CASE BookSize
+  WHEN 'Mini' THEN '1'
+  WHEN 'Small' THEN '2'
+  WHEN 'Medium' THEN '3'
+  WHEN 'Large' THEN '4'
+  WHEN 'TooLong' THEN '5'
+  ELSE '9999'
+  END,
+  BookSize
+--------------
+
++---------------+----------+
+| BookSize      | NumBooks |
++---------------+----------+
+| Mini          |       14 |
+| Small         |       43 |
+| Medium        |       31 |
+| Large         |        2 |
+| TooLong       |        2 |
+| Invalid Input |        0 |
++---------------+----------+
+6 rows in set (0.01 sec)
+
+--------------
+#
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+-- do we need to remove Invalid Input?
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+/*  TASK 07 */
+-- some reason this doesn't work
+Select c_id, c_name
+From a_bkorders.bkv_custorders
+Where c_id in (
+	Select c_id
+	From a_bkorders.bkv_custorders
+	Where Date_Format(order_date, '%Y-%m') = a_testbed.PrevMonth(current_date, 6))
+And c_id in (
+	Select c_id
+	From a_bkorders.bkv_custorders
+	Where Date_Format(order_date, '%Y-%m') = a_testbed.PrevMonth(current_date, 5))
+And c_id in (
+	Select c_id
+	From a_bkorders.bkv_custorders
+	Where Date_Format(order_date, '%Y-%m') = a_testbed.PrevMonth(current_date, 4))
+--------------
+
+Empty set (0.01 sec)
+
+--------------
+-- a simple query works properly
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+Select Distinct c_id, c_name
+From a_bkorders.bkv_custorders
+Where Date_Format(order_date, '%Y-%m') = a_testbed.PrevMonth(current_date, 4)
+--------------
+
++--------+---------------------+
+| c_id   | c_name              |
++--------+---------------------+
+| 222477 | Rossetti, Christina |
+| 267780 | Shelly, Mary        |
+| 272787 | Carlson, Ben        |
+| 290298 | Swift, Jonathan     |
++--------+---------------------+
+4 rows in set (0.01 sec)
+
+--------------
+-- for some reason, a subquery breaks it.
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+Select distinct c_id, c_name
+From a_bkorders.bkv_custorders
+Where c_id in (
+	Select c_id 
+	From a_bkorders.bkv_custorders
+	Where Date_Format(order_date, '%Y-%m') = a_testbed.PrevMonth(current_date, 4))
+--------------
+
+Empty set (0.01 sec)
+
+--------------
+	
+	
+-- another test to make sure function works
+Select some_date, some_month, a_testbed.PrevMonth(some_date, some_month)
+From (
+  Select '2012-05-19' as some_date, 6 as some_month
+  union all
+    Select null, 5
+  union all
+    Select '2011-12-30', null
+  union all
+    Select null, null
+	) as testtable4
+--------------
+
++------------+------------+--------------------------------------------+
+| some_date  | some_month | a_testbed.PrevMonth(some_date, some_month) |
++------------+------------+--------------------------------------------+
+| 2012-05-19 |          6 | 2011-11                                    |
+| NULL       |          5 | 2013-06                                    |
+| 2011-12-30 |       NULL | 2011-12                                    |
+| NULL       |       NULL | 2013-11                                    |
++------------+------------+--------------------------------------------+
+4 rows in set (0.00 sec)
+
+--------------
+/*  TASK 08 */
+Select Count(order_id) as "Number of Orders", Count(Distinct cust_id) as "Number of Customers"
+From a_bkorders.order_headers
+Where Date_Format(order_date, '%Y-%m') IN ((a_testbed.PrevMonth(current_date, 1)),(a_testbed.PrevMonth(current_date, 2)))
+--------------
+
++------------------+---------------------+
+| Number of Orders | Number of Customers |
++------------------+---------------------+
+|               13 |                  10 |
++------------------+---------------------+
+1 row in set (0.01 sec)
+
+Bye

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!--XML document using elements -->
+<pets>
+<animal>
+<an_id>136</an_id>
+<an_type>bird</an_type>
+<an_name>ShowBoat</an_name>
+<an_price>75</an_price>
+<an_dob>2000-01-15</an_dob>
+</animal>
+<animal>
+<an_id>137</an_id>
+<an_type>bird</an_type>
+<an_name>Mr. Peanut</an_name>
+<an_price>150</an_price>
+<an_dob>2008-01-12</an_dob>
+</animal>
+<animal>
+<an_id>1201</an_id>
+<an_type>cat</an_type>
+<an_name>Ursula</an_name>
+<an_price>500</an_price>
+<an_dob>2007-12-15</an_dob>
+</animal>
+<animal>
+	<an_id>2</an_id>
+	<an_type>dog</an_type>
+	<an_name>Ruffy</an_name>
+	<an_price>400</an_price>
+	<an_dob>2013-10-30</an_dob>
+</animal>
+</pets>

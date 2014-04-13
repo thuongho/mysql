@@ -1,0 +1,273 @@
+--------------
+-- Thuong Ho
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+    /* enable warnings! */
+
+use a_vets
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+/*  TASK 00 */ 
+select user(), current_date(), version(), @@sql_mode
+--------------
+
+*************************** 1. row ***************************
+        user(): t_ho@localhost
+current_date(): 2013-09-14
+     version(): 5.6.13
+    @@sql_mode: STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION
+1 row in set (0.00 sec)
+
+--------------
+/*  TASK 01 */
+SELECT DISTINCT concat(cl_postal_code, ': ', cl_city, ' ', cl_state) AS "Location"
+FROM vt_clients
+--------------
+
++-------------------------+
+| Location                |
++-------------------------+
+| 71601: Big Rock AR      |
+| 58503: Big Rock ND      |
+| 45502: Springfield OH   |
+| 10006: New York NY      |
+| 45402: Dayton OH        |
+| 62701: Springfield IL   |
+| 94112: San Francisco CA |
+| 94101: San Francisco CA |
+| 65802: Springfield MO   |
+| 21579: Spring Valley MA |
+| 87801: San Francisco NM |
+| 21555: Boston MA        |
+| 92101: San Diego CA     |
++-------------------------+
+13 rows in set (0.00 sec)
+
+--------------
+/*  TASK 02 */
+SELECT cl_id, cl_name_first, cl_name_last
+FROM vt_clients
+WHERE row(cl_city, cl_state) = row('San Francisco', 'CA')
+--------------
+
++-------+---------------+--------------+
+| cl_id | cl_name_first | cl_name_last |
++-------+---------------+--------------+
+|  5689 | NULL          | Biederbecke  |
+|  5699 | Sam           | Biederbecke  |
++-------+---------------+--------------+
+2 rows in set (0.00 sec)
+
+--------------
+/*  TASK 03 */
+SELECT cl_name_first, cl_name_last, cl_phone
+FROM vt_clients
+WHERE cl_phone IS NOT NULL
+ORDER BY cl_id
+--------------
+
++---------------+--------------+--------------+
+| cl_name_first | cl_name_last | cl_phone     |
++---------------+--------------+--------------+
+| James         | Carter       | 510.258.4546 |
+| Jack          | Dalrymple    | 701.328.2725 |
+| Coleman       | Hawkins      | 937.258.5645 |
+| Theo          | Monk         | 212.582.6245 |
+| NULL          | Biederbecke  | 217.239.6945 |
+| NULL          | Biederbecke  | 415.239.6945 |
+| Sue           | Biederbecke  | 217.239.6875 |
+| Sam           | Biederbecke  | 415.239.6875 |
+| Dave          | Brubeck      | 258.257.2727 |
+| Stanley       | Turrentine   | 619.231.1515 |
++---------------+--------------+--------------+
+10 rows in set (0.00 sec)
+
+--------------
+/*  TASK 04 */
+SELECT stf_name_first, stf_name_last, stf_id
+FROM vt_staff
+WHERE stf_job_title IN ('vet', 'vet assnt')
+--------------
+
++----------------+---------------+--------+
+| stf_name_first | stf_name_last | stf_id |
++----------------+---------------+--------+
+| Eliza          | Dolittle      |     15 |
+| Bridgette      | Wilkommen     |     25 |
+| Sandy          | Helfen        |     29 |
+| Marcin         | Wasilewski    |     30 |
+| Brenda         | Webster       |     37 |
+| Rhoda          | Wabich        |     38 |
+| Dexter         | Gordon        |     52 |
+| Sandy          | Helfen        |     55 |
++----------------+---------------+--------+
+8 rows in set (0.00 sec)
+
+--------------
+/*  TASK 05 */
+SELECT srv_id AS 'Service ID'
+, srv_type AS 'Service Type'
+, srv_desc AS 'Description'
+, srv_list_price AS 'Curr Price'
+, (srv_list_price * 1.1) AS 'Incr Price'
+FROM vt_services
+ORDER BY srv_type, srv_id
+--------------
+
++------------+--------------+--------------------------------------------+------------+------------+
+| Service ID | Service Type | Description                                | Curr Price | Incr Price |
++------------+--------------+--------------------------------------------+------------+------------+
+|        225 | medicine     | Feline PCR Series                          |      75.00 |     82.500 |
+|        551 | medicine     | First Feline PCR                           |      35.50 |     39.050 |
+|        552 | medicine     | Second Feline PCR                          |      25.00 |     27.500 |
+|        553 | medicine     | Third Feline PCR                           |      25.00 |     27.500 |
+|        612 | medicine     | Buprenex oral drops 1 ml                   |      25.91 |     28.501 |
+|        615 | medicine     | antibiotics                                |      78.30 |     86.130 |
+|        687 | medicine     | Vitamin E- Concentrated                    |      45.00 |     49.500 |
+|        748 | medicine     | Preds-liver                                |      29.50 |     32.450 |
+|        749 | medicine     | Preds-chicken                              |      29.50 |     32.450 |
+|       1002 | medicine     | Scaly Mite Powder                          |      25.00 |     27.500 |
+|        104 | office visit | Routine Exam-Reptile                       |      60.00 |     66.000 |
+|        105 | office visit | Routine Exam-Canine                        |      80.00 |     88.000 |
+|        108 | office visit | Routine Exam-Feline                        |      80.00 |     88.000 |
+|        306 | office visit | Followup Exam-Bird                         |      32.00 |     35.200 |
+|        308 | office visit | Followup Exam-Feline                       |      45.00 |     49.500 |
+|        341 | office visit | Followup Exam-Reptile                      |      25.00 |     27.500 |
+|        398 | office visit | Followup Exam-Canine                       |      35.00 |     38.500 |
+|        523 | office visit | Routine Exam-Small Mammal                  |      60.00 |     66.000 |
+|        524 | office visit | Followup Exam-Small Mammal                 |      25.00 |     27.500 |
+|        101 | treatment    | Dental Cleaning-Canine                     |      50.00 |     55.000 |
+|        102 | treatment    | Dental Cleaning-Feline                     |      45.00 |     49.500 |
+|        106 | treatment    | Routine Exam-Bird                          |      75.00 |     82.500 |
+|        110 | treatment    | Dental Cleaning-Other                      |     100.00 |    110.000 |
+|        400 | treatment    | Hazardous Materials Disposal               |      10.50 |     11.550 |
+|        602 | treatment    | General Anethesia 1 hour                   |     222.00 |    244.200 |
+|        603 | treatment    | Feline Dental X_ray                        |      78.00 |     85.800 |
+|        604 | treatment    | Dental Scaling                             |     109.00 |    119.900 |
+|        605 | treatment    | Tooth extraction Level 1                   |     535.00 |    588.500 |
+|        606 | treatment    | Tooth extraction Level 2                   |      40.00 |     44.000 |
+|        607 | treatment    | Tooth extraction Level 3                   |      57.00 |     62.700 |
+|        613 | treatment    | Hospital stay- short                       |      47.00 |     51.700 |
+|        625 | treatment    | CBC and scan                               |     155.00 |    170.500 |
+|       1003 | treatment    | Intestinal Parasite Screen                 |      26.00 |     28.600 |
+|       4601 | treatment    | Feline Behaviour Modification Consultation |     275.00 |    302.500 |
++------------+--------------+--------------------------------------------+------------+------------+
+34 rows in set (0.00 sec)
+
+--------------
+/*  TASK 06 */
+SELECT cl_id, an_id, an_name
+FROM vt_animals
+WHERE an_type IN ('hamster', 'capybara', 'porcupine', 'dormouse')
+ORDER BY cl_id, an_id
+--------------
+
++-------+-------+-----------+
+| cl_id | an_id | an_name   |
++-------+-------+-----------+
+|  1825 | 16002 | Fritz     |
+|  1825 | 21005 | Koshka    |
+|  1825 | 21006 | Koshka    |
+|  3560 | 12038 | Gutsy     |
+|  5699 | 17002 | Fritzchen |
++-------+-------+-----------+
+5 rows in set (0.00 sec)
+
+--------------
+/*  TASK 07 */
+SELECT DISTINCT cl_id, an_type
+FROM vt_animals
+WHERE an_type IN ('snake', 'chelonian', 'crocodilian', 'lizard')
+ORDER BY cl_id
+--------------
+
++-------+-----------+
+| cl_id | an_type   |
++-------+-----------+
+|   411 | lizard    |
+|  1852 | snake     |
+|  4534 | snake     |
+|  5699 | chelonian |
+|  5699 | lizard    |
+|  5699 | snake     |
+|  7152 | lizard    |
++-------+-----------+
+7 rows in set (0.00 sec)
+
+--------------
+/*  TASK 08 */
+SELECT cl_id, an_id, an_name, an_dob
+FROM vt_animals 
+WHERE an_type NOT IN ('snake', 'chelonian', 'crocodilian', 'lizard', 'hamster', 'capybara', 'porcupine', 'dormouse')
+ORDER BY an_dob DESC
+--------------
+
++-------+-------+-----------------+------------+
+| cl_id | an_id | an_name         | an_dob     |
++-------+-------+-----------------+------------+
+|  1852 | 21318 | Waldrom         | 2012-06-11 |
+|  1852 | 21315 | Baldric         | 2012-06-11 |
+|  4534 | 11025 | NULL            | 2012-02-01 |
+|  1852 | 21317 | Manfried        | 2011-06-11 |
+|  1852 | 21314 | Adalwine        | 2011-06-11 |
+|  1852 | 21316 | Etta            | 2010-06-11 |
+|  3560 | 10002 | Gutsy           | 2010-04-15 |
+|   411 | 21001 | Yoggie          | 2009-05-22 |
+|   411 | 19845 | Pinkie          | 2009-02-02 |
+|  6897 | 16004 | Napper          | 2006-06-06 |
+|  1825 | 16003 | Ursula          | 2006-06-06 |
+|   411 | 15165 | Burgess         | 2005-11-20 |
+|  4534 | 11029 | NULL            | 2005-10-01 |
+|   411 | 21003 | Calvin Coolidge | 2004-06-18 |
+|  1825 | 21002 | Edger           | 2002-10-02 |
+|  3560 | 12035 | Mr Peanut       | 1995-02-28 |
++-------+-------+-----------------+------------+
+16 rows in set (0.00 sec)
+
+--------------
+/*  TASK 09 */
+SELECT ex_id, srv_id, ex_fee
+FROM vt_exam_details
+WHERE ex_fee BETWEEN 35 AND 50
+ORDER BY srv_id
+--------------
+
++-------+--------+--------+
+| ex_id | srv_id | ex_fee |
++-------+--------+--------+
+|  3390 |    101 |  50.00 |
+|  3282 |    110 |  50.00 |
+|  3612 |    606 |  40.00 |
+|  3104 |    613 |  47.00 |
+|  3612 |    613 |  47.00 |
+|  1998 |    687 |  45.00 |
+|  3288 |    687 |  45.00 |
+|  3306 |    687 |  45.00 |
+|  3392 |   1003 |  45.00 |
++-------+--------+--------+
+9 rows in set (0.00 sec)
+
+--------------
+/*  TASK 10 */
+SELECT an_id, an_name
+FROM vt_animals
+WHERE an_dob BETWEEN '2000-01-01' AND '2005-12-31'
+--------------
+
++-------+-----------------+
+| an_id | an_name         |
++-------+-----------------+
+| 11029 | NULL            |
+| 15165 | Burgess         |
+| 21002 | Edger           |
+| 21003 | Calvin Coolidge |
++-------+-----------------+
+4 rows in set (0.00 sec)
+
+Bye

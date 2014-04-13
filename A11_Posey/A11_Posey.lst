@@ -1,0 +1,252 @@
+--------------
+/* Kenneth Posey */
+
+    /* enable warnings! */
+
+use   a_bkorders
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+/*  TASK 00 */ 
+
+select user(), current_date(), version(), @@sql_mode
+--------------
+
+*************************** 1. row ***************************
+        user(): root@localhost
+current_date(): 2013-11-09
+     version(): 5.6.13
+    @@sql_mode: STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION
+1 row in set (0.00 sec)
+
+--------------
+/*  Task 01 */ 
+select CU.cust_id
+     , CU.cust_name_last
+     , (
+	     select count(OH.order_id)
+	     from a_bkorders.order_headers OH
+         where CU.cust_id = OH.cust_id 
+	   ) as "number of orders"
+ from a_bkorders.customers CU
+where CU.cust_id <= 250000
+group by CU.cust_id
+order by CU.cust_id
+--------------
+
++---------+----------------+------------------+
+| cust_id | cust_name_last | number of orders |
++---------+----------------+------------------+
+|  200368 | Blake          |                6 |
+|  202958 | Denver         |                0 |
+|  208950 | Adams          |                1 |
+|  211483 | Carroll        |                5 |
+|  212921 | Books on Tap   |               11 |
+|  217002 | Grieg          |                0 |
+|  217796 | Anders         |               11 |
+|  218709 | Bonnard        |               12 |
+|  221297 | Dodgson        |                8 |
+|  222477 | Rossetti       |                9 |
+|  224038 | Austin         |                5 |
+|  226275 | Dalrymple      |                0 |
+|  226656 | Randall        |                3 |
+|  227105 | Kafka          |               14 |
+|  228175 | Cardin         |                2 |
+|  228275 | Mikulski       |                0 |
+|  228352 | Edwards        |                0 |
+|  234138 | Keats          |                9 |
+|  234709 | Brahms         |                3 |
+|  239427 | Marksa         |               10 |
++---------+----------------+------------------+
+20 rows in set (0.00 sec)
+
+--------------
+/*  Task 02 */ 
+select  CU.cust_id
+       ,CU.cust_name_last
+from a_bkorders.customers CU
+where EXISTS 
+      (
+	    select 1
+		from a_bkorders.order_headers OH 
+		where CU.cust_id = OH.cust_id
+        and
+	    (	 OH.order_date <= DATE_SUB((DATE_SUB(CURDATE(), INTERVAL 1 YEAR)), INTERVAL 1 MONTH)
+		 and OH.order_date >= DATE_SUB((DATE_SUB(CURDATE(), INTERVAL 1 YEAR)), INTERVAL 3 MONTH)
+	    )
+	  )
+order by CU.cust_id
+--------------
+
++---------+----------------+
+| cust_id | cust_name_last |
++---------+----------------+
+|  200368 | Blake          |
+|  208950 | Adams          |
+|  212921 | Books on Tap   |
+|  217796 | Anders         |
+|  218709 | Bonnard        |
+|  221297 | Dodgson        |
+|  222477 | Rossetti       |
+|  224038 | Austin         |
+|  227105 | Kafka          |
+|  234138 | Keats          |
+|  234709 | Brahms         |
+|  239427 | Marksa         |
+|  260368 | Muller         |
+|  261502 | Hawthorne      |
+|  263119 | Jones          |
+|  272611 | Jarrett        |
+|  276381 | Collins        |
+|  290298 | Swift          |
++---------+----------------+
+18 rows in set (0.00 sec)
+
+--------------
+/*  Task 03 */ 
+/*I could not figure out how to do the exist on this on*/ 
+
+select AU.author_name_first
+      ,AU.author_name_last
+      ,AU.author_id
+from a_bkinfo.authors AU
+where AU.author_id 
+IN (select author_id
+    from 
+    (
+     select count(BA.book_id)
+            ,author_id
+     from  a_bkinfo.book_authors BA
+     where BA.author_id
+     in
+      (select AU2.author_id
+       from a_bkinfo.authors AU2
+       )
+       group by BA.author_id
+       Having count(BA.book_id) > 1
+    ) MyTempTBL
+  )
+--------------
+
++-------------------+------------------+-----------+
+| author_name_first | author_name_last | author_id |
++-------------------+------------------+-----------+
+| Itzik             | Ben-Gan          | B1112     |
+| Francesco         | Balena           | B2010     |
+| Joe               | Celko            | C0030     |
+| C.J.              | Date             | D0030     |
+| Cruela            | de Vil           | D2110     |
+| Paul              | DuBois           | D8956     |
+| Stephen Jay       | Gould            | G5050     |
+| Bert              | Holldobler       | H3145     |
+| Terry             | Incognito        | I5110     |
+| Susan             | Jackoby          | J8845     |
+| Lubor             | Kollar           | K2002     |
+| Donald            | Kroodsma         | K7620     |
+| Jim               | Melton           | M0053     |
+| Matthew           | MacDonald        | M0157     |
+| Tiya              | Miles            | M0295     |
+| Willie            | Mammoth          | M3110     |
+| Pete              | Moss             | M4540     |
+| Jeffrey           | Richter          | R2040     |
+| Dejan             | Sarka            | S2178     |
+| Bill              | Shredder         | S3110     |
+| E.O.              | Wilson           | W3145     |
++-------------------+------------------+-----------+
+21 rows in set (0.00 sec)
+
+--------------
+/*  Task 04 */ 
+
+
+select book_id
+from a_bkinfo.book_topic BT
+where 
+case topic_id = "MySQL" and
+--------------
+
+--------------
+/*  Task 05 */ 
+/*  Task 06 */ 
+select
+order_date
+order_id
+,cust_id
+,cust_name_last as "customer"
+,sum(quantity) as "NumberBooks"
+,sum(order_price)
+from a_bkorders.customers
+join a_bkorders.order_headers USING (cust_id)
+join a_bkorders.order_details USING (order_id)
+where YEAR(order_date) = YEAR(CURDATE())
+and QUARTER(order_date) = 2
+group by cust_id
+--------------
+
++------------+---------+--------------+-------------+------------------+
+| order_id   | cust_id | customer     | NumberBooks | sum(order_price) |
++------------+---------+--------------+-------------+------------------+
+| 2013-05-01 |  212921 | Books on Tap |          17 |            70.49 |
+| 2013-06-09 |  218709 | Bonnard      |           3 |           100.49 |
+| 2013-06-05 |  222477 | Rossetti     |           1 |            44.99 |
+| 2013-05-26 |  224038 | Austin       |          55 |           445.61 |
+| 2013-06-30 |  227105 | Kafka        |          40 |            55.15 |
+| 2013-05-06 |  228175 | Cardin       |           9 |           280.12 |
+| 2013-04-02 |  234138 | Keats        |          30 |            64.95 |
+| 2013-05-04 |  239427 | Marksa       |         100 |            54.99 |
+| 2013-06-04 |  259906 | Capybara     |          14 |            79.25 |
+| 2013-05-05 |  260368 | Muller       |           1 |            49.95 |
+| 2013-06-29 |  261502 | Hawthorne    |          30 |           150.19 |
+| 2013-04-08 |  272787 | Carlson      |           9 |           130.95 |
+| 2013-04-15 |  276381 | Collins      |           1 |            40.49 |
+| 2013-06-30 |  290298 | Swift        |          70 |            44.99 |
++------------+---------+--------------+-------------+------------------+
+14 rows in set (0.00 sec)
+
+--------------
+/*  Task 07 */ 
+select CU.cust_id
+      ,CU.cust_name_last
+from a_bkorders.customers CU
+join a_bkorders.order_headers  using (cust_id)
+join a_bkorders.order_details  using (order_id)
+group by cust_id
+HAVING count(cust_id) > 1
+--------------
+
++---------+----------------+
+| cust_id | cust_name_last |
++---------+----------------+
+|  200368 | Blake          |
+|  211483 | Carroll        |
+|  212921 | Books on Tap   |
+|  217796 | Anders         |
+|  218709 | Bonnard        |
+|  221297 | Dodgson        |
+|  222477 | Rossetti       |
+|  224038 | Austin         |
+|  226656 | Randall        |
+|  227105 | Kafka          |
+|  228175 | Cardin         |
+|  234138 | Keats          |
+|  234709 | Brahms         |
+|  239427 | Marksa         |
+|  258595 | Jobs           |
+|  259906 | Capybara       |
+|  259969 | Carlsen        |
+|  260368 | Muller         |
+|  261502 | Hawthorne      |
+|  263119 | Jones          |
+|  267780 | Shelly         |
+|  272611 | Jarrett        |
+|  272787 | Carlson        |
+|  276381 | Collins        |
+|  282716 | Biederbecke    |
+|  290298 | Swift          |
+|  299099 | Sam            |
++---------+----------------+
+27 rows in set (0.00 sec)
+
+Bye

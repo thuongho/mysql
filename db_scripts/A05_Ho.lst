@@ -1,0 +1,272 @@
+--------------
+-- Thuong Ho
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+    /* enable warnings! */
+
+use a_vets
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+/*  TASK 00 */ 
+select user(), current_date(), version(), @@sql_mode
+--------------
+
+*************************** 1. row ***************************
+        user(): t_ho@localhost
+current_date(): 2013-09-28
+     version(): 5.6.13
+    @@sql_mode: STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION
+1 row in set (0.00 sec)
+
+--------------
+/*  TASK 01 */
+SELECT an_id, an_name, an_dob
+FROM vt_animals
+WHERE an_type NOT IN ('dog', 'cat', 'bird')
+AND an_dob BETWEEN '2008-01-01' AND '2010-12-31'
+--------------
+
++-------+----------+------------+
+| an_id | an_name  | an_dob     |
++-------+----------+------------+
+| 15001 | Big Mike | 2008-02-02 |
+| 15002 | George   | 2008-02-02 |
+| 16002 | Fritz    | 2010-05-25 |
+| 17025 | 25       | 2010-01-10 |
+| 17026 | 3P#_26   | 2010-01-10 |
+| 17027 | 3P#_25   | 2010-01-10 |
+| 21001 | Yoggie   | 2009-05-22 |
+| 21007 | NULL     | 2010-06-12 |
++-------+----------+------------+
+8 rows in set (0.00 sec)
+
+--------------
+/*  TASK 02 */
+SET @cost = 50
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+SELECT D.srv_id, D.ex_fee, D.ex_id, H.ex_date
+FROM vt_exam_details D
+JOIN vt_exam_headers H ON D.ex_id = H.ex_id
+WHERE D.ex_fee > @cost
+--------------
+
++--------+--------+-------+---------------------+
+| srv_id | ex_fee | ex_id | ex_date             |
++--------+--------+-------+---------------------+
+|    104 |  60.00 |  3101 | 2013-01-02 13:00:00 |
+|    615 |  75.00 |  3101 | 2013-01-02 13:00:00 |
+|    104 |  60.00 |  3102 | 2013-01-02 13:00:00 |
+|   4601 | 275.00 |  3103 | 2013-01-02 15:30:00 |
+|    106 |  75.00 |  3104 | 2013-01-02 16:30:00 |
+|    523 |  50.50 |  3105 | 2012-10-10 09:15:00 |
+|    110 | 150.00 |  3105 | 2012-10-10 09:15:00 |
+|    523 |  60.00 |  3282 | 2013-02-23 10:30:00 |
+|    105 |  55.00 |  3390 | 2013-03-22 09:00:00 |
+|    108 |  80.00 |  3420 | 2013-04-01 16:30:00 |
+|   4601 | 275.00 |  3486 | 2013-03-31 13:00:00 |
+|    110 |  75.00 |  3513 | 2013-06-06 10:30:00 |
+|    602 | 222.00 |  3612 | 2013-05-23 08:30:00 |
+|    603 |  78.00 |  3612 | 2013-05-23 08:30:00 |
+|    604 | 109.00 |  3612 | 2013-05-23 08:30:00 |
+|    625 | 155.00 |  3612 | 2013-05-23 08:30:00 |
+|    607 |  57.00 |  3612 | 2013-05-23 08:30:00 |
+|    615 |  78.30 |  3612 | 2013-05-23 08:30:00 |
++--------+--------+-------+---------------------+
+18 rows in set (0.01 sec)
+
+--------------
+SET @cost = 100
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+SELECT D.srv_id, D.ex_fee, D.ex_id, H.ex_date
+FROM vt_exam_details D
+JOIN vt_exam_headers H ON D.ex_id = H.ex_id
+WHERE D.ex_fee > @cost
+--------------
+
++--------+--------+-------+---------------------+
+| srv_id | ex_fee | ex_id | ex_date             |
++--------+--------+-------+---------------------+
+|   4601 | 275.00 |  3103 | 2013-01-02 15:30:00 |
+|    110 | 150.00 |  3105 | 2012-10-10 09:15:00 |
+|   4601 | 275.00 |  3486 | 2013-03-31 13:00:00 |
+|    602 | 222.00 |  3612 | 2013-05-23 08:30:00 |
+|    604 | 109.00 |  3612 | 2013-05-23 08:30:00 |
+|    625 | 155.00 |  3612 | 2013-05-23 08:30:00 |
++--------+--------+-------+---------------------+
+6 rows in set (0.00 sec)
+
+--------------
+/*  TASK 03 */
+SELECT *
+FROM vt_services
+WHERE srv_desc LIKE '%Feline%'
+AND srv_desc NOT LIKE '%Dental%'
+ORDER BY srv_type, srv_id
+--------------
+
++--------+----------------+--------------------------------------------+--------------+
+| srv_id | srv_list_price | srv_desc                                   | srv_type     |
++--------+----------------+--------------------------------------------+--------------+
+|    225 |          75.00 | Feline PCR Series                          | medicine     |
+|    551 |          35.50 | First Feline PCR                           | medicine     |
+|    552 |          25.00 | Second Feline PCR                          | medicine     |
+|    553 |          25.00 | Third Feline PCR                           | medicine     |
+|    108 |          80.00 | Routine Exam-Feline                        | office visit |
+|    308 |          45.00 | Followup Exam-Feline                       | office visit |
+|   4601 |         275.00 | Feline Behaviour Modification Consultation | treatment    |
++--------+----------------+--------------------------------------------+--------------+
+7 rows in set (0.00 sec)
+
+--------------
+/*  TASK 04 */
+SELECT DISTINCT C.cl_id, C.cl_name_last
+FROM vt_clients C
+JOIN vt_animals A ON C.cl_id = A.cl_id
+--------------
+
++-------+--------------+
+| cl_id | cl_name_last |
++-------+--------------+
+|   411 | Carter       |
+|  1825 | Harris       |
+|  1852 | Dalrymple    |
+|  3560 | Monk         |
+|  4534 | Montgomery   |
+|  5699 | Biederbecke  |
+|  6897 | Drake        |
+|  7152 | Brubeck      |
++-------+--------------+
+8 rows in set (0.00 sec)
+
+--------------
+/*  TASK 05 */
+SELECT DISTINCT cl_id, cl_name_last
+FROM vt_clients
+WHERE cl_id IN (
+	SELECT cl_id
+	FROM vt_animals
+)
+--------------
+
++-------+--------------+
+| cl_id | cl_name_last |
++-------+--------------+
+|   411 | Carter       |
+|  1825 | Harris       |
+|  1852 | Dalrymple    |
+|  3560 | Monk         |
+|  4534 | Montgomery   |
+|  5699 | Biederbecke  |
+|  6897 | Drake        |
+|  7152 | Brubeck      |
++-------+--------------+
+8 rows in set (0.00 sec)
+
+--------------
+/*  TASK 06 */
+SELECT C.cl_id, cl_name_last, an_name, an_type
+FROM vt_clients C
+LEFT JOIN vt_animals A ON C.cl_id = A.cl_id
+ORDER BY cl_id, an_type
+--------------
+
++--------+--------------+-----------------+-----------+
+| cl_id  | cl_name_last | an_name         | an_type   |
++--------+--------------+-----------------+-----------+
+|    411 | Carter       | Burgess         | dog       |
+|    411 | Carter       | Calvin Coolidge | dog       |
+|    411 | Carter       | Pinkie          | dog       |
+|    411 | Carter       | Yoggie          | hedgehog  |
+|    411 | Carter       | Pinkie          | lizard    |
+|   1825 | Harris       | Ursula          | cat       |
+|   1825 | Harris       | Koshka          | dormouse  |
+|   1825 | Harris       | Koshka          | hamster   |
+|   1825 | Harris       | Edger           | hedgehog  |
+|   1825 | Harris       | Fritz           | porcupine |
+|   1852 | Dalrymple    | Baldric         | cat       |
+|   1852 | Dalrymple    | Waldrom         | cat       |
+|   1852 | Dalrymple    | Etta            | cat       |
+|   1852 | Dalrymple    | Adalwine        | cat       |
+|   1852 | Dalrymple    | Manfried        | cat       |
+|   1852 | Dalrymple    | NULL            | snake     |
+|   3423 | Hawkins      | NULL            | NULL      |
+|   3560 | Monk         | Mr Peanut       | bird      |
+|   3560 | Monk         | Gutsy           | cat       |
+|   3560 | Monk         | Gutsy           | porcupine |
+|   4534 | Montgomery   | NULL            | bird      |
+|   4534 | Montgomery   | NULL            | bird      |
+|   4534 | Montgomery   | Kenny           | snake     |
+|   5686 | Biederbecke  | NULL            | NULL      |
+|   5689 | Biederbecke  | NULL            | NULL      |
+|   5698 | Biederbecke  | NULL            | NULL      |
+|   5699 | Biederbecke  | George          | chelonian |
+|   5699 | Biederbecke  | Big Mike        | chelonian |
+|   5699 | Biederbecke  | 25              | lizard    |
+|   5699 | Biederbecke  | Fritzchen       | porcupine |
+|   5699 | Biederbecke  | Gutsy           | snake     |
+|   6897 | Drake        | Napper          | cat       |
+|   7152 | Brubeck      | 3P#_26          | lizard    |
+|   7152 | Brubeck      | 3P#_25          | lizard    |
+|   7212 | Davis        | NULL            | NULL      |
+|  25479 | Boston       | NULL            | NULL      |
+| 408763 | Turrentine   | NULL            | NULL      |
++--------+--------------+-----------------+-----------+
+37 rows in set (0.00 sec)
+
+--------------
+/*  TASK 07 */
+SELECT cl_id, cl_name_last
+FROM vt_clients
+WHERE cl_id IN (
+	SELECT cl_id
+	FROM vt_animals
+	WHERE an_type = 'bird'
+)
+--------------
+
++-------+--------------+
+| cl_id | cl_name_last |
++-------+--------------+
+|  4534 | Montgomery   |
+|  3560 | Monk         |
++-------+--------------+
+2 rows in set (0.00 sec)
+
+--------------
+/*  TASK 08 */
+SELECT cl_id, cl_name_last
+FROM vt_clients
+WHERE cl_id IN (
+	SELECT cl_id
+	FROM vt_animals
+	WHERE an_type = 'bird'
+) 
+AND cl_id IN (
+	SELECT cl_id
+	FROM vt_animals
+	WHERE an_type IN ('snake', 'chelonian', 'crocodilian', 'lizard')
+)
+--------------
+
++-------+--------------+
+| cl_id | cl_name_last |
++-------+--------------+
+|  4534 | Montgomery   |
++-------+--------------+
+1 row in set (0.00 sec)
+
+Bye

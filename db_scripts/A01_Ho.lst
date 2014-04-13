@@ -1,0 +1,267 @@
+--------------
+-- Thuong Ho
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+    /* enable warnings! */
+
+use a_testbed
+--------------
+
+Query OK, 0 rows affected (0.00 sec)
+
+--------------
+/*  TASK 00 */ 
+select user(), current_date(), version(), @@sql_mode
+--------------
+
+*************************** 1. row ***************************
+        user(): t_ho@localhost
+current_date(): 2013-08-30
+     version(): 5.6.13
+    @@sql_mode: STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION
+1 row in set (0.00 sec)
+
+--------------
+/*  TASK 01 */
+delete
+from zoo
+where z_id > 100
+--------------
+
+Query OK, 12 rows affected (0.00 sec)
+
+--------------
+select *
+from zoo
+--------------
+
++------+----------------+-----------+---------+---------------------+------------+
+| z_id | z_name         | z_type    | z_cost  | z_dob               | z_acquired |
++------+----------------+-----------+---------+---------------------+------------+
+|   23 | Sam            | Giraffe   | 5000.00 | 2002-05-15 10:45:00 | 2002-05-15 |
+|   25 | Abigail        | Armadillo |  490.00 | 2010-05-15 08:30:00 | 2010-04-15 |
+|   56 | Leon           | Lion      | 5000.00 | 2009-02-25 15:00:00 | 2011-01-15 |
+|   57 | Lenora         | Lion      | 5000.00 | 2009-02-25 15:30:00 | 2011-01-15 |
+|   85 | Sally Robinson | Giraffe   | 5000.25 | 2009-05-15 02:02:00 | 2012-03-15 |
+|   43 | Huey           | Zebra     | 2500.25 | 2012-06-02 02:02:00 | 2012-06-02 |
+|   44 | Dewey          | Zebra     | 2500.25 | 2012-06-02 02:10:00 | 2012-06-02 |
+|   45 | Louie          | Zebra     | 2500.25 | 2013-01-02 02:25:00 | 2013-01-02 |
++------+----------------+-----------+---------+---------------------+------------+
+8 rows in set (0.00 sec)
+
+--------------
+/*  TASK 02 */
+Insert Into zoo (z_id, z_name, z_type, z_cost, z_dob, z_acquired) 
+  Values (147, 'Maggy', 'Hippo', 9000.00, '2007-02-14 00:47:00', '2009-06-13')
+--------------
+
+Query OK, 1 row affected (0.05 sec)
+
+--------------
+Insert Into zoo (z_id, z_name, z_type, z_cost, z_dob, z_acquired)
+  Values (148, 'Bob', 'Gorilla', 11000.00, '2012-05-20 11:37:00', '2013-04-11')
+--------------
+
+Query OK, 1 row affected (0.00 sec)
+
+--------------
+Insert Into zoo (z_id, z_name, z_type, z_cost, z_dob, z_acquired)
+  Values (149, 'Mike', 'Anaconda', 3000.00, '2004-03-09 18:23:00', '2013-07-03')
+--------------
+
+Query OK, 1 row affected (0.01 sec)
+
+--------------
+/*  TASK 03 */
+Insert Into zoo (z_id, z_name, z_type, z_cost, z_dob, z_acquired) 
+ Values  (133 , 'Larva', 'Bee', 50.00, '2011-05-12 22:47:10', '2011-05-12')
+--------------
+
+Query OK, 1 row affected (0.00 sec)
+
+--------------
+Insert Into zoo (z_id, z_name, z_type, z_cost, z_dob, z_acquired) 
+ Values  (134, 'Antling', 'Ant', 45.00, '2011-05-13 12:47:15', '2011-05-13')
+--------------
+
+Query OK, 1 row affected (0.03 sec)
+
+--------------
+Insert Into zoo (z_id, z_name, z_type, z_cost, z_dob, z_acquired) 
+ Values  (135, 'Duckling', 'Duck', 60.00, '2012-02-22 02:02:02', '2012-02-28')
+--------------
+
+Query OK, 1 row affected (0.00 sec)
+
+--------------
+insert into zoo (z_id, z_name, z_type, z_cost, z_dob, z_acquired) 
+ values (122, 'Nathan','Tiger', 3000.00, '2008-10-26 08:00:00','2008-11-26')
+--------------
+
+Query OK, 1 row affected (0.00 sec)
+
+--------------
+insert into zoo (z_id, z_name, z_type, z_cost, z_dob, z_acquired) 
+ values (112, 'Mark','Tiger', 3000.00, '2008-10-26 08:00:00','2008-11-26')
+--------------
+
+Query OK, 1 row affected (0.00 sec)
+
+--------------
+insert into zoo (z_id, z_name, z_type, z_cost, z_dob, z_acquired) 
+ values (116, 'Jane','Tiger', 3500.00, '2009-06-27 08:00:00','2009-07-27')
+--------------
+
+Query OK, 1 row affected (0.03 sec)
+
+--------------
+Insert Into zoo (z_id, z_name, z_type, z_cost, z_dob, z_acquired) 
+values (201, 'Alex', 'Bear', 8000, '1991-06-11 07:34:00', '2013-05-12')
+--------------
+
+Query OK, 1 row affected (0.00 sec)
+
+--------------
+Insert Into zoo (z_id, z_name, z_type, z_cost, z_dob, z_acquired) 
+values (202, 'Patrick', 'Starfish', 20, '1995-07-05 05:55:00', '2013-05-15')
+--------------
+
+Query OK, 1 row affected (0.00 sec)
+
+--------------
+Insert Into zoo (z_id, z_name, z_type, z_cost, z_dob, z_acquired) 
+values (203, 'Sandy', 'Squirrel', 55, '1994-08-04 04:44:00', '2013-05-19')
+--------------
+
+Query OK, 1 row affected (0.00 sec)
+
+--------------
+/*  TASK 04 */
+select z_id, z_name, z_type, z_cost, z_dob, z_acquired
+from zoo
+--------------
+
++------+----------------+-----------+----------+---------------------+------------+
+| z_id | z_name         | z_type    | z_cost   | z_dob               | z_acquired |
++------+----------------+-----------+----------+---------------------+------------+
+|   23 | Sam            | Giraffe   |  5000.00 | 2002-05-15 10:45:00 | 2002-05-15 |
+|   25 | Abigail        | Armadillo |   490.00 | 2010-05-15 08:30:00 | 2010-04-15 |
+|   56 | Leon           | Lion      |  5000.00 | 2009-02-25 15:00:00 | 2011-01-15 |
+|   57 | Lenora         | Lion      |  5000.00 | 2009-02-25 15:30:00 | 2011-01-15 |
+|   85 | Sally Robinson | Giraffe   |  5000.25 | 2009-05-15 02:02:00 | 2012-03-15 |
+|   43 | Huey           | Zebra     |  2500.25 | 2012-06-02 02:02:00 | 2012-06-02 |
+|   44 | Dewey          | Zebra     |  2500.25 | 2012-06-02 02:10:00 | 2012-06-02 |
+|   45 | Louie          | Zebra     |  2500.25 | 2013-01-02 02:25:00 | 2013-01-02 |
+|  147 | Maggy          | Hippo     |  9000.00 | 2007-02-14 00:47:00 | 2009-06-13 |
+|  148 | Bob            | Gorilla   | 11000.00 | 2012-05-20 11:37:00 | 2013-04-11 |
+|  149 | Mike           | Anaconda  |  3000.00 | 2004-03-09 18:23:00 | 2013-07-03 |
+|  133 | Larva          | Bee       |    50.00 | 2011-05-12 22:47:10 | 2011-05-12 |
+|  134 | Antling        | Ant       |    45.00 | 2011-05-13 12:47:15 | 2011-05-13 |
+|  135 | Duckling       | Duck      |    60.00 | 2012-02-22 02:02:02 | 2012-02-28 |
+|  122 | Nathan         | Tiger     |  3000.00 | 2008-10-26 08:00:00 | 2008-11-26 |
+|  112 | Mark           | Tiger     |  3000.00 | 2008-10-26 08:00:00 | 2008-11-26 |
+|  116 | Jane           | Tiger     |  3500.00 | 2009-06-27 08:00:00 | 2009-07-27 |
+|  201 | Alex           | Bear      |  8000.00 | 1991-06-11 07:34:00 | 2013-05-12 |
+|  202 | Patrick        | Starfish  |    20.00 | 1995-07-05 05:55:00 | 2013-05-15 |
+|  203 | Sandy          | Squirrel  |    55.00 | 1994-08-04 04:44:00 | 2013-05-19 |
++------+----------------+-----------+----------+---------------------+------------+
+20 rows in set (0.00 sec)
+
+--------------
+/*  TASK 05 */
+SELECT z_type, z_name, z_cost
+FROM zoo
+--------------
+
++-----------+----------------+----------+
+| z_type    | z_name         | z_cost   |
++-----------+----------------+----------+
+| Giraffe   | Sam            |  5000.00 |
+| Armadillo | Abigail        |   490.00 |
+| Lion      | Leon           |  5000.00 |
+| Lion      | Lenora         |  5000.00 |
+| Giraffe   | Sally Robinson |  5000.25 |
+| Zebra     | Huey           |  2500.25 |
+| Zebra     | Dewey          |  2500.25 |
+| Zebra     | Louie          |  2500.25 |
+| Hippo     | Maggy          |  9000.00 |
+| Gorilla   | Bob            | 11000.00 |
+| Anaconda  | Mike           |  3000.00 |
+| Bee       | Larva          |    50.00 |
+| Ant       | Antling        |    45.00 |
+| Duck      | Duckling       |    60.00 |
+| Tiger     | Nathan         |  3000.00 |
+| Tiger     | Mark           |  3000.00 |
+| Tiger     | Jane           |  3500.00 |
+| Bear      | Alex           |  8000.00 |
+| Starfish  | Patrick        |    20.00 |
+| Squirrel  | Sandy          |    55.00 |
++-----------+----------------+----------+
+20 rows in set (0.00 sec)
+
+--------------
+/*  TASK 06 */
+SELECT z_type, z_name
+FROM zoo
+ORDER BY z_type, z_name
+--------------
+
++-----------+----------------+
+| z_type    | z_name         |
++-----------+----------------+
+| Anaconda  | Mike           |
+| Ant       | Antling        |
+| Armadillo | Abigail        |
+| Bear      | Alex           |
+| Bee       | Larva          |
+| Duck      | Duckling       |
+| Giraffe   | Sally Robinson |
+| Giraffe   | Sam            |
+| Gorilla   | Bob            |
+| Hippo     | Maggy          |
+| Lion      | Lenora         |
+| Lion      | Leon           |
+| Squirrel  | Sandy          |
+| Starfish  | Patrick        |
+| Tiger     | Jane           |
+| Tiger     | Mark           |
+| Tiger     | Nathan         |
+| Zebra     | Dewey          |
+| Zebra     | Huey           |
+| Zebra     | Louie          |
++-----------+----------------+
+20 rows in set (0.00 sec)
+
+--------------
+/*  TASK 07 */
+desc zoo
+--------------
+
++------------+-----------------------+------+-----+---------+-------+
+| Field      | Type                  | Null | Key | Default | Extra |
++------------+-----------------------+------+-----+---------+-------+
+| z_id       | int(11)               | NO   |     | NULL    |       |
+| z_name     | varchar(25)           | YES  |     | NULL    |       |
+| z_type     | varchar(25)           | NO   |     | NULL    |       |
+| z_cost     | decimal(7,2) unsigned | NO   |     | NULL    |       |
+| z_dob      | datetime              | NO   |     | NULL    |       |
+| z_acquired | date                  | NO   |     | NULL    |       |
++------------+-----------------------+------+-----+---------+-------+
+6 rows in set (0.01 sec)
+
+--------------
+/*  TASK 08 */
+show tables
+--------------
+
++---------------------+
+| Tables_in_a_testbed |
++---------------------+
+| zoo                 |
++---------------------+
+1 row in set (0.00 sec)
+
+Bye
